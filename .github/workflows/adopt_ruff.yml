@@ -42,7 +42,7 @@ jobs:
         continue-on-error: true
 
       - name: Run adopt-ruff
-        run: poetry run adopt_ruff.py
+        run: poetry run python adopt_ruff.py
       
       - name: Set step summary
         run: cat output.md > $GITHUB_STEP_SUMMARY

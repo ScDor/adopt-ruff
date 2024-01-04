@@ -26,7 +26,7 @@ jobs:
 
       - name: Run ruff
         id: ruff_output
-        run: python -m  . --output-format=json --select=ALL > violations.json
+        run: python -m ruff . --output-format=json --select=ALL > violations.json
 
       - name: Run adopt-ruff
         run: python adopt_ruff.py

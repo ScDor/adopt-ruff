@@ -22,11 +22,11 @@ jobs:
 
       - name: Get ruff rule data
         id: ruff_rules
-        run: ruff rule --all --output-format=json > rules.json
+        run: python -m ruff rule --all --output-format=json > rules.json
 
       - name: Run ruff
         id: ruff_output
-        run: ruff . --output-format=json --select=ALL > violations.json
+        run: python -m  . --output-format=json --select=ALL > violations.json
 
       - name: Run adopt-ruff
         run: python adopt_ruff.py

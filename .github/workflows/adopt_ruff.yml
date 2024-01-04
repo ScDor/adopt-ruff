@@ -39,7 +39,7 @@ jobs:
       - name: Run ruff
         id: ruff_output
         run: | 
-          poetry run ruff . --output-format=json --select=ALL --exit-zero) > violations.json 
+          poetry run ruff . --output-format=json --select=ALL --exit-zero > violations.json 
           grep -v ^warning violations.json > violations.json
           cat violations.json
 

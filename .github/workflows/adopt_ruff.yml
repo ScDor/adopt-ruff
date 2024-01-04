@@ -34,16 +34,13 @@ jobs:
 
       - name: Get ruff rule data
         id: ruff_rules
-        run: | 
-          poetry run ruff rule --all --output-format=json > rules.json 
-          cat rules.json 
+        run: poetry run ruff rule --all --output-format=json > rules.json 
 
       - name: Run ruff
         id: ruff_output
         run: | 
-          poetry run ruff . --output-format=json --select=ALL > violations.json
+          poetry run ruff . --output-format=json --select=ALL --exit-zero > violations.json 
           cat violations.json
-        continue-on-error: true
 
       - name: Run adopt-ruff
         run: poetry run python adopt_ruff.py

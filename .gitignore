@@ -1,0 +1,5 @@
+.ruff_cache
+__pycache__
+/rules.json
+/violations.json
+/result.md

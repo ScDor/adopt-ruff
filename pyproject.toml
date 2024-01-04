@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "adopt-ruff"
+version = "0.0.1"
+authors = ["ScDor"]
+description = "Adopt Ruff faster"
+# readme = "README.md" # TODO
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydantic = "^2.5.3"
+ruff = "^0.1.9"
+tabulate = "^0.9.0"
+mdutils = "^1.6.0"
+
+
+
+[tool.ruff]
+select = ["ALL"]
+ignore = [
+    "ANN",
+    "D",
+    "DTZ",
+    "COM812",
+    "EM102",
+    "TRY003",
+    "S113",
+    "G003",
+    "G004",
+    "INP001",
+    "S501",
+    "PD901",
+    "E501",
+    "TD002",
+    "TD003",
+    "TD004",
+    "FIX002",
+]
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

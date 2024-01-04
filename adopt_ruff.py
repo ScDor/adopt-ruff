@@ -25,8 +25,9 @@ def load(
         with path.open() as open_file:
             return tuple(model(**value) for value in json.load(open_file))
 
-    return _load_json_list(rules_path, Rule), _load_json_list(
-        violations_path, Violation
+    return (
+        _load_json_list(rules_path, Rule),
+        _load_json_list(violations_path, Violation),
     )
 
 

@@ -39,6 +39,7 @@ jobs:
       - name: Run ruff
         id: ruff_output
         run: poetry run ruff . --output-format=json --select=ALL > violations.json
+        continue-on-error: true
 
       - name: Run adopt-ruff
         run: poetry run adopt_ruff.py

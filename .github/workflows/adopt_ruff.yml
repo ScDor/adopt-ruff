@@ -38,10 +38,12 @@ jobs:
 
       - name: Run ruff
         id: ruff_output
-        run: |
-          poetry run ruff . --output-format=json --select=ALL --exit-zero > violations.json 2>&1
-          echo "1"
-          cat violations.json
+        run: poetry run ruff . --output-format=json --select=ALL --exit-zero | sed -n '/\[/,//p' > violations.json
+
+      - name: json-yaml-validate
+        uses: GrantBirki/json-yaml-validate@v2.6.0
+        with:
+          files: "violations.json, rules.json"
 
       - name: Run adopt-ruff
         run: poetry run python adopt_ruff.py

@@ -8,22 +8,11 @@ from tabulate import tabulate
 
 
 def make_collapsible(md: str, summary: str) -> str:
-    return tag_wrap(tag_wrap(summary, "summary") + md, "details")
     return "\n".join(
         (
             f"<details><summary>{summary}</summary>",
             md,
             "</details>",
-        )
-    )
-
-
-def tag_wrap(string: str, tag: str, separator: str = "\n"):
-    return separator.join(
-        (
-            f"<{tag}>",
-            string,
-            f"</{tag}>",
         )
     )
 
@@ -62,7 +51,7 @@ def output_table(
     md_table = tabulate(as_dicts, tablefmt="github", headers="keys")
 
     if collapsible:
-        md_table = make_collapsible(f"\n{md_table}", summary=collapsible_summary)
+        md_table = make_collapsible(md_table, summary=collapsible_summary)
 
     md.new_line(md_table)
     table_to_csv(as_dicts, path)

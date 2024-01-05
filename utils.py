@@ -7,16 +7,11 @@ from mdutils.mdutils import MdUtils
 from tabulate import tabulate
 
 
-def make_collapsible(md: str, summary: str) -> str:
-    return "\n".join(  # noqa: FLY002
-        (
-            "<details><summary>",
-            summary,
-            "</summary>",
-            md,
-            "</details>",
-        )
-    )
+def make_collapsible(content: str, summary: str) -> str:
+    return f"""<details>
+    <summary>{summary}</summary>
+    {content}
+    </details>"""
 
 
 def table_to_csv(table: list[dict], path: Path):

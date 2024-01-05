@@ -51,6 +51,6 @@ jobs:
       - name: Set step summary
         run: cat result.md > $GITHUB_STEP_SUMMARY
 
-      # - uses: actions/upload-artifact@v4
-      #   with:
-      #     path: artifacts
+      - uses: actions/upload-artifact@v4
+        with:
+          path: artifacts

@@ -62,7 +62,7 @@ def output_table(
     md_table = tabulate(as_dicts, tablefmt="github", headers="keys")
 
     if collapsible:
-        md_table = make_collapsible(md_table, summary=collapsible_summary)
+        md_table = make_collapsible(f"\n{md_table}", summary=collapsible_summary)
 
     md.new_line(md_table)
     table_to_csv(as_dicts, path)

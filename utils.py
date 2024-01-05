@@ -10,7 +10,9 @@ from tabulate import tabulate
 def make_collapsible(content: str, summary: str) -> str:
     return f"""<details>
     <summary>{summary}</summary>
+
     {content}
+
     </details>"""
 
 

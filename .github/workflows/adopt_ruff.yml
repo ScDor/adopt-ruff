@@ -38,9 +38,7 @@ jobs:
 
       - name: Parse Ruff violations
         id: ruff_output
-        run: |
-          poetry run ruff . --output-format=json --select=ALL --exit-zero | sed -n '/\[/,//p' > violations.json
-          cat violations.json
+        run: poetry run ruff . --output-format=json --select=ALL --exit-zero > violations.json
 
       - name: Validate json files
         uses: GrantBirki/json-yaml-validate@v2.6.0

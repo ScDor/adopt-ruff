@@ -40,9 +40,9 @@ def run(
 
     # TODO ignore configured/ignored?
     if already_respected := respected_rules(violations, rules):
-        md.new_header(1, "Respected Ruff rules")
+        md.new_header(2, "Respected Ruff rules")
         md.new_line(f"{len(already_respected)} Ruff rules can be added right away 🚀")
-        md.new_line("The repo already respects them - enforcing will be seamless.")
+        md.new_line(f"{repo_name} already respects them - enforcing will be seamless.")
         md.new_paragraph(tabulate(already_respected, tablefmt="github", headers="keys"))
         # TODO save a CSV artifact
 
@@ -62,6 +62,7 @@ def respected_rules(
             "Code": rule.code,
             "Name": rule.name,
             "Fixable": rule.fix.one_word,
+            "Previw": rule.preview,
         }
         for rule in sorted(respected, key=lambda r: r.code)
     )

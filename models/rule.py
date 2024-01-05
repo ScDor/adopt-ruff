@@ -18,7 +18,7 @@ class FixAvailability(Enum):
             case FixAvailability.SOMETIMES:
                 return "Sometimes"
             case FixAvailability.NOT:
-                return "Not"
+                return "No"
             case _:
                 raise ValueError
 

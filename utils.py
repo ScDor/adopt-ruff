@@ -8,9 +8,11 @@ from tabulate import tabulate
 
 
 def make_collapsible(md: str, summary: str) -> str:
-    return "\n".join(
+    return "\n".join(  # noqa: FLY002
         (
-            f"<details><summary>\n{summary}</summary>",
+            "<details><summary>",
+            summary,
+            "</summary>",
             md,
             "</details>",
         )

@@ -32,13 +32,15 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
 
-      - name: Get ruff rule data
+      - name: Parse Ruff rules
         id: ruff_rules
         run: poetry run ruff rule --all --output-format=json > rules.json 
 
-      - name: Run ruff
+      - name: Parse Ruff violations
         id: ruff_output
-        run: poetry run ruff . --output-format=json --select=ALL --exit-zero | sed -n '/\[/,//p' > violations.json
+        run: |
+          poetry run ruff . --output-format=json --select=ALL --exit-zero | sed -n '/\[/,//p' > violations.json
+          cat violations.json
 
       - name: Validate json files
         uses: GrantBirki/json-yaml-validate@v2.6.0

@@ -3,20 +3,20 @@ from __future__ import annotations
 from pydantic import BaseModel
 
 
-class Location(BaseModel):
+class Location(BaseModel, frozen=True):
     column: int
     row: int
 
 
-class Edit(BaseModel):
+class Edit(BaseModel, frozen=True):
     content: str
     end_location: Location
     location: Location
 
 
-class Fix(BaseModel):
+class Fix(BaseModel, frozen=True):
     applicability: str
-    edits: list[Edit]
+    edits: tuple[Edit, ...]
     message: str
 
 

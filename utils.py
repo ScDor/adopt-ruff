@@ -40,13 +40,12 @@ def output_table(
     path: Path,
     md: MdUtils,
     collapsible: bool,
-    collapsible_summary: str = "See table",
+    collapsible_summary: str = "Details",
 ) -> None:
     """
     Creates a markdown table, and saves to a CSV
     """
     as_dicts = tuple(item.as_dict for item in items)
-
     md_table = tabulate(as_dicts, tablefmt="github", headers="keys")
 
     if collapsible:

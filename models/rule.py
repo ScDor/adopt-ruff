@@ -32,7 +32,7 @@ class Rule(BaseModel, frozen=True):
     code: str
     linter: str
     summary: str
-    message_formats: list[str]
+    message_formats: tuple[str, ...]
     fix: FixAvailability
     explanation: str
     preview: bool
@@ -46,3 +46,7 @@ class Rule(BaseModel, frozen=True):
             "Fixable": self.fix.one_word,
             "Preview": self.preview,
         }
+
+    @property
+    def is_fixable(self):
+        return self.fix in {FixAvailability.ALWAYS, FixAvailability.SOMETIMES}

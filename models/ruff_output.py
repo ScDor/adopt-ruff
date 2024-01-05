@@ -25,7 +25,7 @@ class Violation(BaseModel, frozen=True):
     code: str
     end_location: Location
     filename: str
-    fix: Fix
+    fix: Fix | None
     location: Location
     message: str
     noqa_row: int

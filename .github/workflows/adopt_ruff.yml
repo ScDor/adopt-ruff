@@ -40,7 +40,7 @@ jobs:
         id: ruff_output
         run: poetry run ruff . --output-format=json --select=ALL --exit-zero | sed -n '/\[/,//p' > violations.json
 
-      - name: json-yaml-validate
+      - name: Validate json files
         uses: GrantBirki/json-yaml-validate@v2.6.0
         with:
           files: "violations.json, rules.json"

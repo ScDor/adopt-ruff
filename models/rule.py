@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -35,3 +36,13 @@ class Rule(BaseModel, frozen=True):
     fix: FixAvailability
     explanation: str
     preview: bool
+
+    @property
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "Linter": self.linter,
+            "Code": self.code,
+            "Name": self.name,
+            "Fixable": self.fix.one_word,
+            "Preview": self.preview,
+        }

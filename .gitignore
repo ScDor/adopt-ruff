@@ -3,3 +3,4 @@ __pycache__
 /rules.json
 /violations.json
 /result.md
+/artifacts

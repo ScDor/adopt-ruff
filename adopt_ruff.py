@@ -1,20 +1,14 @@
-from __future__ import annotations
-
 import json
 from pathlib import Path
-from typing import TYPE_CHECKING
 
 from mdutils.mdutils import MdUtils
-from tabulate import tabulate
+from pydantic import BaseModel
 
 from models.ruff_output import Violation
 from models.rule import Rule
+from utils import output_table
 
-if TYPE_CHECKING:
-    from pydantic import BaseModel
-
-ARTIFACTS_PATH = Path("artifacts")
-ARTIFACTS_PATH.mkdir(exist_ok=True)
+(ARTIFACTS_PATH := Path("artifacts")).mkdir(exist_ok=True)
 
 
 def load(
@@ -41,34 +35,27 @@ def run(
     # TODO ignore configured/ignored?
     if already_respected := respected_rules(violations, rules):
         md.new_header(1, "Respected Ruff rules")
-        md.new_line(f"{len(already_respected)} Ruff rules can be added right away 🚀")
-        md.new_line(f"{repo_name} already respects them - enforcing will be seamless.")
-        md.new_paragraph(tabulate(already_respected, tablefmt="github", headers="keys"))
-        # TODO save a CSV artifact
-
-    # TODO add autofixable table (always/sometimes)
+        md.new_line(
+            f"{len(already_respected)} Ruff rules are respected in the repo - "
+            "They can be added right away 🚀"
+        )
+        output_table(
+            already_respected,
+            ARTIFACTS_PATH / "respected.csv",
+            md=md,
+            collapsible=True,
+        )
     return md.get_md_text()
 
 
 def respected_rules(
     violations: tuple[Violation, ...],
     rules: tuple[Rule, ...],
-) -> tuple[dict]:
-    violation_codes = {v.code for v in violations}
-    respected = [rule for rule in rules if rule.code not in violation_codes]
-    return tuple(
-        {
-            "Linter": rule.linter,
-            "Code": rule.code,
-            "Name": rule.name,
-            "Fixable": rule.fix.one_word,
-            "Preview": rule.preview,
-        }
-        for rule in sorted(respected, key=lambda r: r.code)
-    )
+) -> tuple[Rule, ...]:
+    violated_codes = {v.code for v in violations}
+    return tuple(rule for rule in rules if rule.code not in violated_codes)
 
 
 rules, violations = load()
 result = run(rules, violations)
 Path("result.md").write_text(result)
-print(result)

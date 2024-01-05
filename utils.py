@@ -10,7 +10,7 @@ from tabulate import tabulate
 def make_collapsible(md: str, summary: str) -> str:
     return "\n".join(
         (
-            f"<details><summary>{summary}</summary>",
+            f"<details><summary>\n{summary}</summary>",
             md,
             "</details>",
         )

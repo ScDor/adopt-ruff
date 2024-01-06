@@ -5,4 +5,4 @@ jobs:
   adopt-ruff:
     runs-on: ubuntu-latest
     steps:
-      - uses: ScDor/adopt-ruff@${{ github.ref }}
+      - uses: ./action.yml

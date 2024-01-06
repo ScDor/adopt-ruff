@@ -4,10 +4,10 @@ from pathlib import Path
 from mdutils.mdutils import MdUtils
 from pydantic import BaseModel
 
-from models.ruff_config import RuffConfig
-from models.ruff_output import Violation
-from models.rule import FixAvailability, Rule
-from utils import output_table
+from adopt_ruff.models.ruff_config import RuffConfig
+from adopt_ruff.models.ruff_output import Violation
+from adopt_ruff.models.rule import FixAvailability, Rule
+from adopt_ruff.utils import output_table
 
 (ARTIFACTS_PATH := Path("artifacts")).mkdir(exist_ok=True)
 
@@ -37,7 +37,7 @@ def run(
     rules: tuple[Rule, ...],
     violations: tuple[Violation, ...],
     config: RuffConfig,
-    repo_name: str = "dummy/repo",
+    repo_name: str,
 ) -> str:
     md = MdUtils("output")
     md.new_header(1, f"adopt-ruff report for {repo_name}")
@@ -115,7 +115,14 @@ def autofixable_rules(
     }
 
 
-if __name__ == "__main__":
+def main():
     rules, violations, config = load()
-    result = run(rules, violations, config)
+    result = run(
+        rules, violations, config, repo_name="dummy/repo"
+    )  # TODO repo name arg
+
     Path("result.md").write_text(result)
+
+
+if __name__ == "__main__":
+    main()

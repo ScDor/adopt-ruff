@@ -1,0 +1,8 @@
+name: Adopt Ruff
+on: [push, workflow_dispatch]
+
+jobs:
+  adopt-ruff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ScDor/adopt-ruff@${{ github.ref_name }}

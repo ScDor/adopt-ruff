@@ -1,0 +1,65 @@
+name: "adopt-ruff"
+
+description: "Adopt ruff easily"
+inputs:
+  repository:
+    description: "Repository name with owner. For example, ScDor/adopt-ruff"
+    default: ${{ github.repository }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check out repository code
+      uses: actions/checkout@v4
+
+    - name: Set up python
+      id: setup-python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: Set up Poetry
+      uses: snok/install-poetry@v1
+      with:
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
+
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+    - name: Install dependencies
+      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+      run: poetry install --no-interaction --no-root
+      shell: bash
+
+    - name: Parse Ruff rules
+      id: ruff_rules
+      run: poetry run ruff rule --all --output-format=json > rules.json
+      shell: bash
+
+    - name: Parse Ruff violations
+      id: ruff_output
+      run: poetry run ruff . --output-format=json --select=ALL --exit-zero > violations.json
+      shell: bash
+
+    - name: Validate json files
+      uses: GrantBirki/json-yaml-validate@v2.6.0
+      with:
+        files: "violations.json, rules.json"
+
+    - name: Run adopt-ruff
+      run: poetry run adopt_ruff
+      shell: bash
+
+    - name: Set step summary
+      run: cat result.md > $GITHUB_STEP_SUMMARY
+      shell: bash
+
+    - uses: actions/upload-artifact@v4
+      with:
+        path: artifacts

@@ -8,4 +8,4 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
 
-      - uses: /adopt_ruff/action.yml
+      - uses: /.action.yml

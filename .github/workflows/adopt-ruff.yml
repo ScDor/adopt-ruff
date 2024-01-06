@@ -8,4 +8,5 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
 
-      - uses: ./
+      - name: Run the adopt-ruff action
+        uses: ./

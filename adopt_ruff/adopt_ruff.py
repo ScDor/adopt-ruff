@@ -1,8 +1,9 @@
 import json
+from collections.abc import Iterable
 from pathlib import Path
 
 from mdutils.mdutils import MdUtils
-from pydantic import BaseModel
+from pydantic import BaseModel, DirectoryPath
 
 from adopt_ruff.models.ruff_config import RuffConfig
 from adopt_ruff.models.ruff_output import Violation
@@ -33,51 +34,14 @@ def load(
     return rules, violations, config
 
 
-def run(
+def find_applicable_rules(
     rules: tuple[Rule, ...],
-    violations: tuple[Violation, ...],
-    config: RuffConfig,
-    repo_name: str,
-) -> str:
-    md = MdUtils("output")
-    md.new_header(1, f"adopt-ruff report for {repo_name}")
-    rules_already_configured = config.all_rules
-
-    if respected := sorted(
-        respected_rules(violations, rules, rules_already_configured),
-        key=lambda rule: rule.code,
-    ):
-        md.new_header(2, "Respected Ruff rules")
-        md.new_line(
-            f"{len(respected)} Ruff rules are already respected in the repo - "
-            "they can be added right away 🚀"
-        )
-        output_table(
-            items=respected,
-            path=ARTIFACTS_PATH / "respected.csv",
-            md=md,
-            collapsible=True,
-        )
-
-    if autofixable := sorted(
-        autofixable_rules(violations, rules, rules_already_configured),
-        key=lambda rule: rule.code,
-    ):
-        md.new_header(2, "Autofixable Ruff rules")
-        md.new_line(
-            f"{len(autofixable)} Ruff rules are violated in the repo, but can be auto-fixed 🪄"
-        )
-        output_table(
-            items=autofixable,
-            path=ARTIFACTS_PATH / "autofixable.csv",
-            md=md,
-            collapsible=True,
-        )
-
-    return md.get_md_text()
+    rules_already_configured: set[Rule],
+):
+    return set(rules).difference(rules_already_configured)
 
 
-def respected_rules(
+def find_respected_rules(
     violations: tuple[Violation, ...],
     rules: tuple[Rule, ...],
     rules_already_configured: set[Rule],
@@ -91,7 +55,7 @@ def respected_rules(
     }
 
 
-def autofixable_rules(
+def find_autofixable_rules(
     violations: tuple[Violation, ...],
     rules: tuple[Rule, ...],
     rules_already_configured: set[Rule],
@@ -113,6 +77,71 @@ def autofixable_rules(
             else True
         )
     }
+
+
+def output_rules(
+    rules: Iterable[Rule],
+    md: MdUtils,
+    title: str,
+    description: str,
+    output_dir: DirectoryPath = ARTIFACTS_PATH,
+    collapsible: bool = True,
+):
+    if not rules:
+        return
+
+    rules = tuple(sort_by_code(rules))
+
+    md.new_header(2, f"{title.title()} Ruff rules")
+    md.new_line(f"{len(rules)} Ruff rules {description}")
+
+    output_table(
+        items=sort_by_code(rules),
+        path=output_dir / f"{title.lower()}.csv",
+        md=md,
+        collapsible=collapsible,
+    )
+
+
+def sort_by_code(rules: Iterable[Rule]) -> list[Rule]:
+    return tuple(sorted(rules, key=lambda rule: rule.code))
+
+
+def run(
+    rules: tuple[Rule, ...],
+    violations: tuple[Violation, ...],
+    config: RuffConfig,
+    repo_name: str,
+) -> str:
+    md = MdUtils("output")
+    md.new_header(1, f"adopt-ruff report for {repo_name}")
+    configured_rules = config.all_rules
+
+    output_rules(
+        rules=find_respected_rules(violations, rules, configured_rules),
+        file_name="respected",
+        title="Respected",
+        description="are already respected in the repo - they can be added right away 🚀",
+        md=md,
+    )
+
+    output_rules(
+        title="autofixable",
+        rules=find_autofixable_rules(  # TODO pass args
+            violations, rules, configured_rules
+        ),
+        description="are violated in the repo, but can be auto-fixed 🪄",
+        md=md,
+    )
+
+    output_rules(
+        title="applicable",
+        rules=find_applicable_rules(rules, configured_rules),
+        description="are not yet configured in the repository 🛠️",
+        md=md,
+    )
+
+    return md.get_md_text()
 
 
 def main():

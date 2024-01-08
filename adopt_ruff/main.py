@@ -1,8 +1,10 @@
 import json
+import subprocess
+import sys
 from pathlib import Path
 
+from loguru import logger
 from mdutils.mdutils import MdUtils
-from pydantic import BaseModel
 
 from adopt_ruff.models.ruff_config import RuffConfig
 from adopt_ruff.models.ruff_output import Violation
@@ -12,25 +14,46 @@ from adopt_ruff.utils import output_table
 (ARTIFACTS_PATH := Path("artifacts")).mkdir(exist_ok=True)
 
 
-def load(
-    rules_path: Path = Path("rules.json"),
-    violations_path: Path = Path("violations.json"),
-    configurations_path: Path = Path("pyproject.toml"),
-) -> tuple[
-    tuple[Rule, ...],
-    tuple[Violation, ...],
-    RuffConfig,
-]:
-    def _load_json_list(path: Path, model: BaseModel):
-        with path.open() as open_file:
-            return tuple(model(**value) for value in json.load(open_file))
+def run_ruff() -> tuple[tuple[Rule, ...], tuple[Violation, ...]]:
+    try:
+        rules = tuple(
+            Rule(**value)
+            for value in json.loads(
+                subprocess.run(
+                    [
+                        "ruff",
+                        "rule",
+                        "--all",
+                        "--output-format=json",
+                    ],
+                    check=False,
+                    text=True,
+                    capture_output=True,
+                ).stdout
+            )
+        )
+        violations = tuple(
+            Violation(**value)
+            for value in json.loads(
+                subprocess.run(
+                    [
+                        "ruff",
+                        ".",
+                        "--output-format=json",
+                        "--select=ALL",
+                        "--exit-zero",
+                    ],
+                    check=False,
+                    text=True,
+                    capture_output=True,
+                ).stdout
+            )
+        )
+    except FileNotFoundError:
+        logger.error("Make sure ruff is installed (pip install ruff)")
+        sys.exit(1)
 
-    rules = _load_json_list(rules_path, Rule)
-
-    violations = _load_json_list(violations_path, Violation)
-    config = RuffConfig.from_path(configurations_path, rules)
-
-    return rules, violations, config
+    return rules, violations
 
 
 def run(
@@ -116,10 +139,17 @@ def autofixable_rules(
 
 
 def main():
-    rules, violations, config = load()
+    rules, violations = run_ruff()
+    config = RuffConfig.from_path(
+        Path("pyproject.toml"), rules
+    )  # TODO take path as argument
+
     result = run(
-        rules, violations, config, repo_name="dummy/repo"
-    )  # TODO repo name arg
+        rules,
+        violations,
+        config,
+        repo_name="dummy/repo",  # TODO take repo_name as arg
+    )
 
     Path("result.md").write_text(result)
 

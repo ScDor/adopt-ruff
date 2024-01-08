@@ -331,7 +331,7 @@ files = [
 name = "ruff"
 version = "0.1.11"
 description = "An extremely fast Python linter and code formatter, written in Rust."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -422,4 +422,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "8a97c592b37725b120b68aa09b0cbb447a0a8ec484e4b5b051ed7d34be8debcb"
+content-hash = "51d111183df1c1a7e5804c03c7eb5a7f7326b5f761abae6ba7700f410aee0a47"

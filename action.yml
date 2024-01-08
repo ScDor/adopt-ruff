@@ -23,16 +23,6 @@ runs:
       run: pip install ruff # TODO
       shell: bash
 
-    - name: Parse ruff rules
-      id: ruff_rules
-      run: python -m ruff rule --all --output-format=json > rules.json
-      shell: bash
-
-    - name: Parse ruff violations
-      id: ruff_output
-      run: python -m  ruff . --output-format=json --select=ALL --exit-zero > violations.json
-      shell: bash
-
     - name: Run adopt-ruff
       run: adopt_ruff
       shell: bash

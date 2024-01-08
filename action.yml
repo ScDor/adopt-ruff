@@ -10,7 +10,7 @@ runs:
   using: "composite"
   steps:
     - name: Install adopt-ruff
-      run: pip install git+https://github.com/ScDor/adopt-ruff${{  inputs.version  }} -q
+      run: pip install git+https://github.com/ScDor/adopt-ruff@${{  inputs.version  }} -q
       shell: bash
 
     - name: Run adopt-ruff

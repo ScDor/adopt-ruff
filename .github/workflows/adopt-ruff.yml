@@ -21,4 +21,4 @@ jobs:
       - name: Run the adopt-ruff action
         uses: ./
         with:
-          version: foo
+          version: ${{  github.ref  }}

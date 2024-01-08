@@ -46,6 +46,7 @@ ignore = [
     "FBT002",
     "S603",
     "S607",
+    "PLR0913",
 ]
 [build-system]
 requires = ["poetry-core"]

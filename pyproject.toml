@@ -8,16 +8,18 @@ description = "Adopt Ruff faster"
 [tool.poetry.dependencies]
 python = "^3.11"
 pydantic = "^2.5.3"
-ruff = "^0.1.9"
 tabulate = "^0.9.0"
 mdutils = "^1.6.0"
+loguru = "^0.7.2"
+packaging = "^23.2"
 
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.6.0"
+ruff = "^0.1.11"
 
 [tool.poetry.scripts]
-adopt_ruff = "adopt_ruff.adopt_ruff:main"
+adopt-ruff = "adopt_ruff.main:main"
 
 [tool.ruff]
 target-version = "py311"
@@ -43,6 +45,8 @@ ignore = [
     "EM101",
     "FBT001",
     "FBT002",
+    "S603",
+    "S607",
     "PLR0913",
 ]
 [build-system]

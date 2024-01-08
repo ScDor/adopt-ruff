@@ -25,16 +25,16 @@ runs:
 
     - name: Parse ruff rules
       id: ruff_rules
-      run: poetry run ruff rule --all --output-format=json > rules.json
+      run: python -m ruff rule --all --output-format=json > rules.json
       shell: bash
 
     - name: Parse ruff violations
       id: ruff_output
-      run: poetry run ruff . --output-format=json --select=ALL --exit-zero > violations.json
+      run: python -m  ruff . --output-format=json --select=ALL --exit-zero > violations.json
       shell: bash
 
     - name: Run adopt-ruff
-      run: poetry run adopt_ruff
+      run: python adopt_ruff
       shell: bash
 
     - name: Set step summary

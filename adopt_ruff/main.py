@@ -5,6 +5,7 @@ from pathlib import Path
 
 from loguru import logger
 from mdutils.mdutils import MdUtils
+from packaging.version import Version
 
 from adopt_ruff.models.ruff_config import RuffConfig
 from adopt_ruff.models.ruff_output import Violation
@@ -14,46 +15,45 @@ from adopt_ruff.utils import output_table
 (ARTIFACTS_PATH := Path("artifacts")).mkdir(exist_ok=True)
 
 
-def run_ruff() -> tuple[tuple[Rule, ...], tuple[Violation, ...]]:
+def run_ruff() -> tuple[tuple[Rule, ...], tuple[Violation, ...], Version]:
     try:
-        rules = tuple(
-            Rule(**value)
-            for value in json.loads(
-                subprocess.run(
-                    [
-                        "ruff",
-                        "rule",
-                        "--all",
-                        "--output-format=json",
-                    ],
-                    check=False,
-                    text=True,
-                    capture_output=True,
-                ).stdout
-            )
+        ruff_version = Version(
+            subprocess.run(
+                ["ruff", "--version"],
+                check=True,
+                text=True,
+                capture_output=True,
+            ).stdout.split()[1]  # ruff's output is `ruff x.y.z`
         )
-        violations = tuple(
-            Violation(**value)
-            for value in json.loads(
-                subprocess.run(
-                    [
-                        "ruff",
-                        ".",
-                        "--output-format=json",
-                        "--select=ALL",
-                        "--exit-zero",
-                    ],
-                    check=False,
-                    text=True,
-                    capture_output=True,
-                ).stdout
-            )
-        )
+
     except FileNotFoundError:
         logger.error("Make sure ruff is installed (pip install ruff)")
         sys.exit(1)
 
-    return rules, violations
+    # Now when ruff is found, assume the following commands will run properly
+    rules = tuple(
+        Rule(**value)
+        for value in json.loads(
+            subprocess.run(
+                ["ruff", "rule", "--all", "--output-format=json"],
+                check=True,
+                text=True,
+                capture_output=True,
+            ).stdout
+        )
+    )
+    violations = tuple(
+        Violation(**value)
+        for value in json.loads(
+            subprocess.run(
+                ["ruff", ".", "--output-format=json", "--select=ALL", "--exit-zero"],
+                check=True,
+                text=True,
+                capture_output=True,
+            ).stdout
+        )
+    )
+    return rules, violations, ruff_version
 
 
 def run(
@@ -61,9 +61,10 @@ def run(
     violations: tuple[Violation, ...],
     config: RuffConfig,
     repo_name: str,
+    ruff_version: Version,
 ) -> str:
     md = MdUtils("output")
-    md.new_header(1, f"adopt-ruff report for {repo_name}")
+    md.new_header(1, f"adopt-ruff report for {repo_name} (ruff {ruff_version!s})")
     rules_already_configured = config.all_rules
 
     if respected := sorted(
@@ -139,7 +140,7 @@ def autofixable_rules(
 
 
 def main():
-    rules, violations = run_ruff()
+    rules, violations, ruff_version = run_ruff()
     config = RuffConfig.from_path(
         Path("pyproject.toml"), rules
     )  # TODO take path as argument
@@ -149,6 +150,7 @@ def main():
         violations,
         config,
         repo_name="dummy/repo",  # TODO take repo_name as arg
+        ruff_version=ruff_version,
     )
 
     Path("result.md").write_text(result)

@@ -24,7 +24,7 @@ runs:
       shell: bash
 
     - name: Run adopt-ruff
-      run: adopt_ruff
+      run: adopt-ruff
       shell: bash
 
     - name: Set step summary

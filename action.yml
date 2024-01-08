@@ -9,18 +9,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Set up python
-      id: setup-python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.11"
-
     - name: Install adopt-ruff
       run: pip install git+https://github.com/ScDor/adopt-ruff -q
-      shell: bash
-
-    - name: Install ruff
-      run: pip install ruff # TODO
       shell: bash
 
     - name: Run adopt-ruff

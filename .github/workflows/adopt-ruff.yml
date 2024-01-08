@@ -1,5 +1,5 @@
 name: Adopt Ruff
-on: [push, workflow_dispatch]
+on: [push, workflow_dispatch, pull_request]
 
 jobs:
   adopt-ruff:
@@ -7,6 +7,16 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+      
+      - name: Install ruff
+        run: pip install ruff
+        shell: bash
+
+      - name: Set up python
+        id: setup-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
 
       - name: Run the adopt-ruff action
         uses: ./

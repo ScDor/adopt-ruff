@@ -15,39 +15,23 @@ runs:
       with:
         python-version: "3.11"
 
-    - name: Set up Poetry
-      uses: snok/install-poetry@v1
-      with:
-        virtualenvs-create: true
-        virtualenvs-in-project: true
-        installer-parallel: true
-
-    - name: Load cached venv
-      id: cached-poetry-dependencies
-      uses: actions/cache@v3
-      with:
-        path: .venv
-        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-
-    - name: Install dependencies
-      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-      run: poetry install --no-interaction --no-root
+    - name: Install adopt-ruff
+      run: pip install git+https://github.com/ScDor/adopt-ruff
       shell: bash
 
-    - name: Parse Ruff rules
+    - name: Install ruff
+      run: pip install ruff # TODO
+      shell: bash
+
+    - name: Parse ruff rules
       id: ruff_rules
       run: poetry run ruff rule --all --output-format=json > rules.json
       shell: bash
 
-    - name: Parse Ruff violations
+    - name: Parse ruff violations
       id: ruff_output
       run: poetry run ruff . --output-format=json --select=ALL --exit-zero > violations.json
       shell: bash
-
-    - name: Validate json files
-      uses: GrantBirki/json-yaml-validate@v2.6.0
-      with:
-        files: "violations.json, rules.json"
 
     - name: Run adopt-ruff
       run: poetry run adopt_ruff

@@ -5,7 +5,7 @@ from typing import Self
 
 from pydantic import BaseModel
 
-from models.rule import Rule
+from adopt_ruff.models.rule import Rule
 
 MIN_RULE_CODE_LEN = 4
 DEFAULT_SELECT_RULES = ("E", "F")

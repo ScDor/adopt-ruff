@@ -34,7 +34,7 @@ runs:
       shell: bash
 
     - name: Run adopt-ruff
-      run: python -m adopt_ruff
+      run: adopt_ruff
       shell: bash
 
     - name: Set step summary

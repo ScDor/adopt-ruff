@@ -40,11 +40,11 @@ class Rule(BaseModel, frozen=True):
     @property
     def as_dict(self) -> dict[str, Any]:
         return {
-            "Linter": self.linter,
             "Code": self.code,
             "Name": self.name,
             "Fixable": self.fix.one_word,
             "Preview": self.preview,
+            "Linter": self.linter,
         }
 
     @property

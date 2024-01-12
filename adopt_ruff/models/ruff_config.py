@@ -1,7 +1,6 @@
 import tomllib
 from collections.abc import Iterable
 from pathlib import Path
-from typing import Self
 
 from pydantic import BaseModel
 
@@ -16,7 +15,7 @@ class RawRuffConfig(BaseModel, frozen=True):
     ignored_codes: set[str]
 
     @classmethod
-    def from_path(cls, path: Path) -> Self:
+    def from_path(cls, path: Path) -> "RawRuffConfig":
         if not path.exists():
             raise FileNotFoundError(path)
 
@@ -43,10 +42,10 @@ class RawRuffConfig(BaseModel, frozen=True):
         )
 
     @classmethod
-    def default_config(cls) -> Self:
+    def default_config(cls) -> "RawRuffConfig":
         return RawRuffConfig(
             selected_codes=set(DEFAULT_SELECT_RULES),
-            ignored_codes={},
+            ignored_codes=set(),
         )
 
 
@@ -55,9 +54,9 @@ class RuffConfig(BaseModel, frozen=True):
     ignored_rules: tuple[Rule, ...]
 
     @staticmethod
-    def from_path(path: Path, rules: Iterable[Rule]) -> Self:
+    def from_path(path: Path, rules: Iterable[Rule]) -> "RuffConfig":
         raw = RawRuffConfig.from_path(path)
-
+        rules = tuple(rules)
         return RuffConfig(
             selected_rules=_parse_raw_rules(raw.selected_codes, rules),
             ignored_rules=_parse_raw_rules(raw.ignored_codes, rules),
@@ -76,7 +75,7 @@ def _parse_raw_rules(codes: Iterable[str], rules: tuple[Rule, ...]) -> tuple[Rul
         return rules
 
     code_to_rule = {rule.code: rule for rule in rules}
-    result = []
+    result: list[Rule] = []
 
     for code in codes:
         if code.isalpha() or len(code) < MIN_RULE_CODE_LEN:

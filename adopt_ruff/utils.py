@@ -1,7 +1,6 @@
 import csv
 from collections.abc import Iterable
 from pathlib import Path
-from typing import Protocol
 
 from mdutils.mdutils import MdUtils
 from tabulate import tabulate
@@ -30,13 +29,8 @@ def table_to_csv(table: list[dict], path: Path):
         writer.writerows(item.values() for item in table)
 
 
-class SupportsAsDict(Protocol):
-    def as_dict(self) -> dict:
-        ...
-
-
 def output_table(
-    items: Iterable[SupportsAsDict],
+    items: Iterable[dict],
     path: Path,
     md: MdUtils,
     collapsible: bool,
@@ -45,11 +39,10 @@ def output_table(
     """
     Creates a markdown table, and saves to a CSV
     """
-    as_dicts = tuple(item.as_dict for item in items)
-    md_table = tabulate(as_dicts, tablefmt="github", headers="keys")
+    md_table = tabulate(items, tablefmt="github", headers="keys")
 
     if collapsible:
         md_table = make_collapsible(md_table, summary=collapsible_summary)
 
     md.new_line(md_table)
-    table_to_csv(as_dicts, path)
+    table_to_csv(list(items), path)

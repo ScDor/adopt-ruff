@@ -1,10 +1,12 @@
 import csv
 from collections.abc import Iterable
 from pathlib import Path
-from typing import Protocol
 
 from mdutils.mdutils import MdUtils
 from tabulate import tabulate
+
+from adopt_ruff.models.ruff_output import Violation
+from adopt_ruff.models.rule import Rule
 
 
 def make_collapsible(content: str, summary: str) -> str:
@@ -30,13 +32,15 @@ def table_to_csv(table: list[dict], path: Path):
         writer.writerows(item.values() for item in table)
 
 
-class SupportsAsDict(Protocol):
-    def as_dict(self) -> dict:
-        ...
+def filter_violated_rules(
+    violations: Iterable[Violation], rules: Iterable[Rule]
+) -> Iterable[Rule]:
+    violated_codes = {violation.code for violation in violations}
+    return (rule for rule in rules if rule.code not in violated_codes)
 
 
 def output_table(
-    items: Iterable[SupportsAsDict],
+    items: Iterable[Rule],
     path: Path,
     md: MdUtils,
     collapsible: bool,
@@ -52,4 +56,4 @@ def output_table(
         md_table = make_collapsible(md_table, summary=collapsible_summary)
 
     md.new_line(md_table)
-    table_to_csv(as_dicts, path)
+    table_to_csv(list(as_dicts), path)

@@ -3,18 +3,21 @@ name: "adopt-ruff"
 description: "Adopt ruff easily"
 inputs:
   version:
-    description: "version"
+    description: "adopt-ruff version to use"
     default: master
+  repo_name:
+    description: "name of the repository being checked"
+    default: ${{  github.repository  }}
 
 runs:
   using: "composite"
   steps:
     - name: Install adopt-ruff
-      run: pip install git+https://github.com/ScDor/adopt-ruff@${{  inputs.version  }} -q
+      run: pip install git+https://github.com/ScDor/adopt-ruff@${{inputs.version}} -q
       shell: bash
 
     - name: Run adopt-ruff
-      run: adopt-ruff
+      run: adopt-ruff --repo-name=${{inputs.repo_name}}
       shell: bash
 
     - name: Set step summary

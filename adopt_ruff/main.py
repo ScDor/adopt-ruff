@@ -3,6 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import typer
 from loguru import logger
 from mdutils.mdutils import MdUtils
 from packaging.version import Version
@@ -64,7 +65,10 @@ def run(
     ruff_version: Version,
 ) -> str:
     md = MdUtils("output")
-    md.new_header(1, f"adopt-ruff report for {repo_name} (ruff {ruff_version!s})")
+
+    repo_name_header = f"for {repo_name} " if repo_name else ""
+    md.new_header(1, f"adopt-ruff report {repo_name_header}(ruff {ruff_version!s})")
+
     rules_already_configured = config.all_rules
 
     if respected := sorted(
@@ -139,7 +143,7 @@ def autofixable_rules(
     }
 
 
-def main():
+def _main(repo_name: str = ""):
     rules, violations, ruff_version = run_ruff()
     config = RuffConfig.from_path(
         Path("pyproject.toml"), rules
@@ -149,11 +153,15 @@ def main():
         rules,
         violations,
         config,
-        repo_name="dummy/repo",  # TODO take repo_name as arg
+        repo_name=repo_name,
         ruff_version=ruff_version,
     )
 
     Path("result.md").write_text(result)
+
+
+def main():
+    typer.run(_main)
 
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@ import json
 import subprocess
 import sys
 from pathlib import Path
+from typing import Annotated
 
 import typer
 from loguru import logger
@@ -61,11 +62,14 @@ def run(
     rules: tuple[Rule, ...],
     violations: tuple[Violation, ...],
     config: RuffConfig,
-    repo_name: str,
+    repo_name: str | None,
     ruff_version: Version,
 ) -> str:
     md = MdUtils("output")
-    md.new_header(1, f"adopt-ruff report for {repo_name} (ruff {ruff_version!s})")
+
+    repo_name_header = f"for {repo_name} " if repo_name else ""
+    md.new_header(1, f"adopt-ruff report{repo_name_header}(ruff {ruff_version!s})")
+
     rules_already_configured = config.all_rules
 
     if respected := sorted(
@@ -140,7 +144,9 @@ def autofixable_rules(
     }
 
 
-def _main(repo_name: str):
+def _main(
+    repo_name: Annotated[str | None, typer.Argument(help="The repository name")] = None,
+):
     rules, violations, ruff_version = run_ruff()
     config = RuffConfig.from_path(
         Path("pyproject.toml"), rules

@@ -67,7 +67,7 @@ def run(
     md = MdUtils("output")
 
     repo_name_header = f"for {repo_name} " if repo_name else ""
-    md.new_header(1, f"adopt-ruff report{repo_name_header}(ruff {ruff_version!s})")
+    md.new_header(1, f"adopt-ruff report {repo_name_header}(ruff {ruff_version!s})")
 
     rules_already_configured = config.all_rules
 

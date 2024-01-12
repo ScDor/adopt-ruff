@@ -2,7 +2,6 @@ import json
 import subprocess
 import sys
 from pathlib import Path
-from typing import Annotated
 
 import typer
 from loguru import logger
@@ -144,11 +143,7 @@ def autofixable_rules(
     }
 
 
-def _main(
-    repo_name: Annotated[
-        str, typer.Argument(help="The repository name", default="")
-    ] = "",
-):
+def _main(repo_name: str = ""):
     rules, violations, ruff_version = run_ruff()
     config = RuffConfig.from_path(
         Path("pyproject.toml"), rules

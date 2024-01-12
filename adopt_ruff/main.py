@@ -62,7 +62,7 @@ def run(
     rules: tuple[Rule, ...],
     violations: tuple[Violation, ...],
     config: RuffConfig,
-    repo_name: str | None,
+    repo_name: str,
     ruff_version: Version,
 ) -> str:
     md = MdUtils("output")
@@ -145,7 +145,9 @@ def autofixable_rules(
 
 
 def _main(
-    repo_name: Annotated[str | None, typer.Argument(help="The repository name")] = None,
+    repo_name: Annotated[
+        str, typer.Argument(help="The repository name", default="")
+    ] = "",
 ):
     rules, violations, ruff_version = run_ruff()
     config = RuffConfig.from_path(

@@ -5,9 +5,6 @@ from pathlib import Path
 from mdutils.mdutils import MdUtils
 from tabulate import tabulate
 
-from adopt_ruff.models.ruff_output import Violation
-from adopt_ruff.models.rule import Rule
-
 
 def make_collapsible(content: str, summary: str) -> str:
     return f"""<details>
@@ -32,15 +29,8 @@ def table_to_csv(table: list[dict], path: Path):
         writer.writerows(item.values() for item in table)
 
 
-def filter_violated_rules(
-    violations: Iterable[Violation], rules: Iterable[Rule]
-) -> Iterable[Rule]:
-    violated_codes = {violation.code for violation in violations}
-    return (rule for rule in rules if rule.code not in violated_codes)
-
-
 def output_table(
-    items: Iterable[Rule],
+    items: Iterable[dict],
     path: Path,
     md: MdUtils,
     collapsible: bool,
@@ -49,11 +39,10 @@ def output_table(
     """
     Creates a markdown table, and saves to a CSV
     """
-    as_dicts = tuple(item.as_dict for item in items)
-    md_table = tabulate(as_dicts, tablefmt="github", headers="keys")
+    md_table = tabulate(items, tablefmt="github", headers="keys")
 
     if collapsible:
         md_table = make_collapsible(md_table, summary=collapsible_summary)
 
     md.new_line(md_table)
-    table_to_csv(list(as_dicts), path)
+    table_to_csv(list(items), path)

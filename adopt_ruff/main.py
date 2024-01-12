@@ -1,9 +1,11 @@
+import itertools
 import json
 import subprocess
 import sys
 from collections.abc import Iterable
 from pathlib import Path
 
+import more_itertools
 import typer
 from loguru import logger
 from mdutils.mdutils import MdUtils
@@ -12,7 +14,7 @@ from packaging.version import Version
 from adopt_ruff.models.ruff_config import RuffConfig
 from adopt_ruff.models.ruff_output import Violation
 from adopt_ruff.models.rule import FixAvailability, Rule
-from adopt_ruff.utils import filter_violated_rules, output_table
+from adopt_ruff.utils import output_table
 
 (ARTIFACTS_PATH := Path("artifacts")).mkdir(exist_ok=True)
 
@@ -82,14 +84,14 @@ def run(
             "they can be added right away 🚀"
         )
         output_table(
-            items=respected,
+            items=([r.as_dict for r in respected]),
             path=ARTIFACTS_PATH / "respected.csv",
             md=md,
             collapsible=True,
         )
 
     if autofixable := sort_by_code(
-        autofixable_rules(violations, rules, configured_rules),
+        autofixable_rules(violations, rules, configured_rules)
         # TODO pass args
     ):
         md.new_header(2, "Autofixable Ruff rules")
@@ -97,26 +99,44 @@ def run(
             f"{len(autofixable)} Ruff rules are violated in the repo, but can be auto-fixed 🪄"
         )
         output_table(
-            items=autofixable,
+            items=([r.as_dict for r in autofixable]),
             path=ARTIFACTS_PATH / "autofixable.csv",
             md=md,
             collapsible=True,
         )
 
-    if applicable := sort_by_code(  # TODO sort by violation count, show violation count
-        applicable_rules(
+    if violated_rule_to_violations := (
+        violated_rules(
             violations,
             rules,
-            configured_rules,
-            already_recommended=respected + autofixable,
+            excluded_rules=(
+                itertools.chain.from_iterable(
+                    (configured_rules, respected, autofixable)
+                )
+            ),
         )
     ):
+        rule_to_violation_count = {
+            rule: len(violations_)
+            for rule, violations_ in violated_rule_to_violations.items()
+        }
+
+        applicable_rules = sorted(
+            violated_rule_to_violations.keys(),
+            key=lambda rule: (rule_to_violation_count[rule], rule.linter, rule.code),
+        )
+
         md.new_header(2, "Applicable Rules")
         md.new_line(
-            f"{len(autofixable)} Ruff rules are not yet configured in the repository"
+            f"{len(applicable_rules)} other Ruff rules are not yet configured in the repository"
         )
         output_table(
-            items=applicable,
+            items=(
+                [
+                    r.as_dict | {"Violations": rule_to_violation_count[r]}
+                    for r in applicable_rules
+                ]
+            ),
             path=ARTIFACTS_PATH / "applicable.csv",
             md=md,
             collapsible=True,
@@ -167,19 +187,30 @@ def autofixable_rules(
     }
 
 
-def applicable_rules(
+def violated_rules(
     violations: tuple[Violation, ...],
     rules: set[Rule],
-    already_configured: set[Rule],
-    already_recommended: Iterable[Rule],
-):
-    ignore_codes = {r.code for r in already_configured | set(already_recommended)}
-
-    return tuple(
-        rule
-        for rule in filter_violated_rules(violations, rules)
+    excluded_rules: Iterable[Rule],
+) -> dict[Rule, tuple[Violation, ...]]:
+    ignore_codes = {rule.code for rule in excluded_rules}
+    return {
+        rule: violations
+        for rule, violations in map_rules_to_violations(rules, violations).items()
         if rule.code not in ignore_codes
-    )
+    }
+
+
+def map_rules_to_violations(
+    rules: Iterable[Rule],
+    violations: Iterable[Violation],
+) -> dict[Rule, tuple[Violation, ...]]:
+    code_to_violations = more_itertools.bucket(violations, key=lambda v: v.code)
+    code_to_rule = {rule.code: rule for rule in rules}
+
+    return {
+        code_to_rule[code]: tuple(code_to_violations[code])
+        for code in code_to_violations
+    }
 
 
 def _main(repo_name: str = ""):

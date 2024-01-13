@@ -22,13 +22,15 @@ runs:
       run: pip install git+https://github.com/ScDor/adopt-ruff@${{inputs.version}} -q
       shell: bash
     - name: set preview arg
+      id: preview-arg
       run: |
-        print (type(${{ inputs.include-preview }}))
+        preview = {True: "--preview", False: "--no-preview"}[${{ inputs.include-preview }}]
+        open(os.environ['GITHUB_ENV']).write(f"PREVIEW={preview}")
       shell: python
 
     - name: Run adopt-ruff
       run: |
-        adopt-ruff --repo-name=${{inputs.repo-name}} --sometimes-fixable=${{inputs.include-sometimes-fixable}}
+        adopt-ruff --repo-name=${{inputs.repo-name}} --sometimes-fixable=${{inputs.include-sometimes-fixable}} --${{steps.preview-arg.outputs.PREVIEW}}
       shell: bash
 
     - name: Set step summary

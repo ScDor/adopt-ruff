@@ -5,9 +5,15 @@ inputs:
   version:
     description: "adopt-ruff version to use"
     default: master
-  repo_name:
+  repo-name:
     description: "name of the repository being checked"
     default: ${{  github.repository  }}
+  include-sometimes-fixable:
+    description: "whether to count sometimes-fixable rules as fixable"
+    default: "False"
+  include-preview:
+    description: "whether to count preview rules"
+    default: "True"
 
 runs:
   using: "composite"
@@ -17,7 +23,7 @@ runs:
       shell: bash
 
     - name: Run adopt-ruff
-      run: adopt-ruff --repo-name=${{inputs.repo_name}}
+      run: adopt-ruff --repo-name=${{inputs.repo-name}} --include-sometimes-fixable=${{inputs.include-sometimes-fixable}} --include-preview=${{inputs.include-preview}}
       shell: bash
 
     - name: Set step summary

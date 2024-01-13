@@ -64,9 +64,14 @@ def run(
     rules: set[Rule],
     violations: tuple[Violation, ...],
     config: RuffConfig,
-    repo_name: str,
     ruff_version: Version,
+    include_sometimes_fixable: bool,
+    include_preview: bool,
+    repo_name: str,
 ) -> str:
+    logger.info(
+        f"{include_sometimes_fixable=}, {include_preview=}, {repo_name=}, {ruff_version=}"
+    )
     md = MdUtils("output")
 
     repo_name_header = f"for {repo_name} " if repo_name else ""
@@ -91,7 +96,13 @@ def run(
         )
 
     if autofixable := sort_by_code(
-        autofixable_rules(violations, rules, configured_rules)
+        autofixable_rules(
+            violations,
+            rules,
+            configured_rules,
+            include_sometimes_fixable,
+            include_preview,
+        )
         # TODO pass args
     ):
         md.new_header(2, "Autofixable Ruff rules")
@@ -166,7 +177,7 @@ def respected_rules(
 def autofixable_rules(
     violations: tuple[Violation, ...],
     rules: Iterable[Rule],
-    rules_already_configured: set[Rule],
+    configured_rules: set[Rule],
     include_sometimes_fixable: bool = False,
     include_preview: bool = False,
 ) -> set[Rule]:
@@ -176,7 +187,7 @@ def autofixable_rules(
         rule
         for rule in rules
         if rule.code in violated_codes
-        and rule not in rules_already_configured
+        and rule not in configured_rules
         and rule.is_fixable
         and (not rule.preview if not include_preview else True)
         and (
@@ -213,18 +224,22 @@ def map_rules_to_violations(
     }
 
 
-def _main(repo_name: str = ""):
+def _main(
+    include_preview: bool,
+    include_sometimes_fixable: bool,
+    repo_name: str = "",
+):
     rules, violations, ruff_version = run_ruff()
-    config: RuffConfig = RuffConfig.from_path(
-        Path("pyproject.toml"), rules
-    )  # TODO take path as argument
+    config: RuffConfig = RuffConfig.from_path(Path("pyproject.toml"), rules)
 
     result = run(
         rules,
         violations,
         config,
-        repo_name=repo_name,
         ruff_version=ruff_version,
+        include_preview=include_preview,
+        include_sometimes_fixable=include_sometimes_fixable,
+        repo_name=repo_name,
     )
 
     Path("result.md").write_text(result)

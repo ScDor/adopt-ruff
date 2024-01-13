@@ -1,6 +1,7 @@
 # Adopt-Ruff
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-Adopt [Ruff](https://ruff.rs) in your repo faster 😎
+Adopt [Ruff⚡](https://ruff.rs) in your repo faster 😎
 
 A tool for finding Ruff rules that are not yet configured, and can be added to your repository easily: 
 

@@ -10,14 +10,15 @@ import more_itertools
 import typer
 from mdutils.mdutils import MdUtils
 from packaging.version import Version
+from tabulate import tabulate
 
 from adopt_ruff.models.ruff_config import RuffConfig
 from adopt_ruff.models.ruff_output import Violation
 from adopt_ruff.models.rule import FixAvailability, Rule
-from adopt_ruff.utils import ARTIFACTS_PATH, logger, output_table
+from adopt_ruff.utils import ARTIFACTS_PATH, logger, output_table, search_config_file
 
 
-def run_ruff() -> tuple[set[Rule], tuple[Violation, ...], Version]:
+def run_ruff(path: Path) -> tuple[set[Rule], tuple[Violation, ...], Version]:
     try:
         ruff_version = Version(
             subprocess.run(
@@ -51,7 +52,13 @@ def run_ruff() -> tuple[set[Rule], tuple[Violation, ...], Version]:
         Violation(**value)
         for value in json.loads(
             subprocess.run(
-                ["ruff", ".", "--output-format=json", "--select=ALL", "--exit-zero"],
+                [
+                    "ruff",
+                    str(path),
+                    "--output-format=json",
+                    "--select=ALL",
+                    "--exit-zero",
+                ],
                 check=True,
                 text=True,
                 capture_output=True,
@@ -104,8 +111,9 @@ def run(
         )
     ):
         md.new_header(2, "Autofixable Ruff rules")
+        always_status = " (sometimes)" if include_sometimes_fixable else ""
         md.new_line(
-            f"{len(autofixable)} Ruff rules are violated in the repo, but can be auto-fixed 🪄"
+            f"{len(autofixable)} Ruff rules are violated in the repo, but can{always_status} be auto-fixed 🪄"
         )
         output_table(
             items=([r.as_dict for r in autofixable]),
@@ -152,19 +160,30 @@ def run(
         )
 
     if not any((respected, autofixable, violated_rule_to_violations)):
-        md.new_line("You adopted Ruff well! 👏")
-        md.new_line("All rules are either selected or ignored")
+        md.new_line(
+            f"You adopted Ruff well! 👏 {len(rules)} ruff rules are either selected or ignored."
+        )
         if not include_preview:
             md.new_line(
-                "You used --no-preview, hiding information about rules in preview-mode.\n"
-                "Consider running adopt-ruff again with the --preview, there may be more useful rules there.\n"
-                "Visit [ruff's docs](https://docs.astral.sh/ruff/faq/#what-is-preview) for more information"
+                "You used --no-preview, ignoring rules in preview-mode.\n"
+                "Consider running adopt-ruff again with the `--preview` flag: there may be more useful rules there 🔍\n"
+                "Visit ⚡[Ruff's docs](https://docs.astral.sh/ruff/faq/#what-is-preview) for more information."
             )
         elif not include_sometimes_fixable:
             md.new_line(
-                "Consider running adopt-ruff again with the --sometimes-fixable flag"
+                "Consider running adopt-ruff again with the `--sometimes-fixable flag`"
             )
 
+    md.new_line(
+        tabulate(
+            [
+                ["Include sometimes-fixable rules", include_sometimes_fixable],
+                ["Include preview rules", include_preview],
+            ],
+            tablefmt="github",
+            headers=["Configuration", "Value"],
+        )
+    )
     return md.get_md_text()
 
 
@@ -237,6 +256,25 @@ def map_rules_to_violations(
 
 
 def _main(
+    code_path: Annotated[
+        Path,
+        typer.Option(
+            help="The directory on which ruff should be run. If not provided, the current directory will be used.",
+            envvar="ADOPT_RUFF_CODE_PATH",
+            exists=True,
+            dir_okay=True,
+            file_okay=False,
+        ),
+    ] = Path(),
+    ruff_conf_path: Annotated[
+        Optional[Path],  # noqa: UP007
+        typer.Option(
+            help="Path to the pyproject.toml/ruff.toml file. If not provided, adopt-ruff will attempt to locate it.",
+            envvar="ADOPT_RUFF_CONFIG_FILE_PATH",
+            exists=True,
+            dir_okay=False,
+        ),
+    ] = None,
     include_sometimes_fixable: Annotated[
         bool,
         typer.Option(
@@ -260,20 +298,27 @@ def _main(
     repo_name: Annotated[
         Optional[str],  # noqa: UP007
         typer.Option(
-            help="The repository name, shown in the report",
+            help="The repository name for the report",
             envvar="ADOPT_RUFF_REPO_NAME",
         ),
     ] = None,
 ):
-    logger.debug(f"{include_preview=}, {include_sometimes_fixable=}, {repo_name=}")
+    logger.debug(f"{code_path.resolve()=!s}")
+    logger.debug(f"{ruff_conf_path=!s}")
+    logger.debug(f"{include_preview=}")
+    logger.debug(f"{include_sometimes_fixable=}")
+    logger.debug(f"{repo_name=}")
 
-    rules, violations, ruff_version = run_ruff()
-    config: RuffConfig = RuffConfig.from_path(Path("pyproject.toml"), rules)
+    rules, violations, ruff_version = run_ruff(code_path)
+    config: RuffConfig = RuffConfig.from_file(
+        path=ruff_conf_path or search_config_file(code_path),
+        rules=rules,
+    )
 
     result = run(
-        rules,
-        violations,
-        config,
+        rules=rules,
+        violations=violations,
+        config=config,
         ruff_version=ruff_version,
         include_preview=include_preview,
         include_sometimes_fixable=include_sometimes_fixable,
@@ -281,7 +326,7 @@ def _main(
     )
 
     Path("result.md").write_text(result)
-    logger.success("wrote output to result.md")
+    logger.debug("wrote output to result.md")
 
 
 def main():

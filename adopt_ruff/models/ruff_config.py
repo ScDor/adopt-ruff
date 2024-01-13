@@ -1,5 +1,4 @@
 import tomllib
-from collections.abc import Iterable
 from pathlib import Path
 
 from pydantic import BaseModel
@@ -16,30 +15,38 @@ class RawRuffConfig(BaseModel, frozen=True):
     ignored_codes: set[str]
 
     @classmethod
-    def from_path(cls, path: Path) -> "RawRuffConfig":
-        if not path.exists():
-            raise FileNotFoundError(path)
+    def read_toml(cls, path: Path) -> "RawRuffConfig":
+        try:
+            toml = tomllib.loads(path.read_text())
+        except ValueError as e:
+            raise ValueError(f"make sure that {path.name} is a valid toml") from e
 
-        toml = tomllib.loads(path.read_text())
         match path.name:
             case "pyproject.toml":
-                if (ruff := toml.get("tool", {}).get("ruff")) is None:
+                if (ruff_section := toml.get("tool", {}).get("ruff")) is None:
+                    logger.warning(
+                        f"could not find `tool` or `tool.ruff` in {path.name}, using default"
+                    )
                     return cls.default_config()
 
             case "ruff.toml" | ".ruff.toml":
-                ruff = toml
+                ruff_section = toml
             case _:
                 raise ValueError(
-                    "config file must be pyproject.toml, ruff.toml or .ruff.toml"
+                    f"config file must be pyproject.toml, ruff.toml or .ruff.toml, got {path.name}"
                 )
 
-        config = ruff.get(
-            "lint", ruff
+        ruff_lint_section = ruff_section.get(
+            "lint", ruff_section
         )  # both are valid, `lint` was added at some point
 
+        raw_select_codes = set(ruff_lint_section.get("select", ()))
+        raw_ignored_codes = set(ruff_lint_section.get("ignore", ()))
+
+        logger.debug(f"{len(raw_select_codes)=}, {len(raw_ignored_codes)=}")
         return RawRuffConfig(
-            selected_codes=set(config.get("select", ())),
-            ignored_codes=set(config.get("ignore", ())),
+            selected_codes=raw_select_codes,
+            ignored_codes=raw_ignored_codes,
         )
 
     @classmethod
@@ -51,35 +58,42 @@ class RawRuffConfig(BaseModel, frozen=True):
 
 
 class RuffConfig(BaseModel, frozen=True):
-    selected_rules: tuple[Rule, ...]
-    ignored_rules: tuple[Rule, ...]
+    selected_rules: set[Rule]
+    ignored_rules: set[Rule]
 
     @staticmethod
-    def from_path(path: Path, rules: Iterable[Rule]) -> "RuffConfig":
-        logger.debug(f"reading ruff config file from {path!s}")
-        raw = RawRuffConfig.from_path(path)
-        rules = tuple(rules)
+    def from_file(path: Path | None, rules: set[Rule]) -> "RuffConfig":
+        if path:
+            logger.debug(f"reading ruff config file from {path!s}")
+            raw_config = RawRuffConfig.read_toml(path)
+        else:
+            logger.warning(
+                f"Config path was not specified, using default={DEFAULT_SELECT_RULES}"
+            )
+            raw_config = RawRuffConfig.default_config()
+
         return RuffConfig(
-            selected_rules=_parse_raw_rules(raw.selected_codes, rules),
-            ignored_rules=_parse_raw_rules(raw.ignored_codes, rules),
+            selected_rules=_parse_raw_rules(raw_config.selected_codes, rules),
+            ignored_rules=_parse_raw_rules(raw_config.ignored_codes, rules),
         )
 
     @property
     def all_rules(self) -> set[Rule]:
-        return set(self.selected_rules + self.ignored_rules)
+        return self.selected_rules | self.ignored_rules
 
 
-def _parse_raw_rules(codes: set[str], rules: tuple[Rule, ...]) -> tuple[Rule, ...]:
+def _parse_raw_rules(raw_codes: set[str], rules: set[Rule]) -> set[Rule]:
     """
     Convert code values (E401), categories (E) and ALL, into Rule objects
     """
-    if "ALL" in codes:
+    if "ALL" in raw_codes:
         return rules
 
     code_to_rule = {rule.code: rule for rule in rules}
-    result: list[Rule] = []
 
-    for code in codes:
+    result: set[Rule] = set()
+
+    for code in raw_codes:
         if code.isalpha() or len(code) < MIN_RULE_CODE_LEN:
             code_rules = tuple(
                 rule for rule in rules if rule.code.removeprefix(code).isnumeric()
@@ -87,9 +101,11 @@ def _parse_raw_rules(codes: set[str], rules: tuple[Rule, ...]) -> tuple[Rule, ..
             logger.debug(
                 f"assuming {code} is a category, adding {len(code_rules)} rules: {sorted(r.code for r in code_rules)!s}"
             )
-            result.extend(code_rules)
+            result.update(code_rules)
             # TODO are there cases of category names with len>=MIN_RULE_CODE_LEN, mixing alpha&digits?
         else:
-            result.append(code_to_rule[code])
-    logger.debug(f"parsed {len(codes)} codes into {len(result)} rules")
-    return tuple(result)
+            result.add(code_to_rule[code])
+
+    logger.debug(f"converted {len(raw_codes)} raw codes into {len(result)} rules")
+
+    return result

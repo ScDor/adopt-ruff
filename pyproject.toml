@@ -3,7 +3,7 @@ name = "adopt-ruff"
 version = "0.0.1"
 authors = ["ScDor"]
 description = "Adopt Ruff faster"
-# readme = "README.md" # TODO
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"

@@ -1,6 +1,7 @@
 name: "adopt-ruff"
-icon: arrow-up
-color: yellow
+branding:
+  icon: "arrow-up"
+  color: "yellow"
 
 description: "Adopt ruff easily"
 inputs:

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "adopt-ruff"
-version = "0.0.1"
+version = "0.1.0"
 authors = ["ScDor"]
 description = "Adopt Ruff faster"
 readme = "README.md"

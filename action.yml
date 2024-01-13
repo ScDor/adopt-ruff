@@ -24,7 +24,7 @@ runs:
     - name: set preview arg
       run: |
         import os
-        print(os.environ().keys())
+        print(os.environ)
       shell: python
 
     - name: Run adopt-ruff

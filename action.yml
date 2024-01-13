@@ -21,17 +21,14 @@ runs:
     - name: Install adopt-ruff
       run: pip install git+https://github.com/ScDor/adopt-ruff@${{inputs.version}} -q
       shell: bash
-    - name: set preview arg
-      id: preview-arg
-      run: |
-        import os
-        preview = {True: "--preview", False: "--no-preview"}[${{ inputs.include-preview }}]
-        open(os.environ['GITHUB_ENV'],'a').write(f"PREVIEW={preview}")
-      shell: python
 
     - name: Run adopt-ruff
-      run: |
-        adopt-ruff --repo-name=${{inputs.repo-name}} --sometimes-fixable=${{inputs.include-sometimes-fixable}} --${{steps.preview-arg.outputs.PREVIEW}}
+      run: adopt-ruff
+      env:
+        ADOPT_RUFF_REPO_NAME: ${{ inputs.repo-name  }}
+        ADOPT_RUFF_SOMETIMES_FIXABLE: ${{ inputs.include-sometimes-fixable  }}
+        ADOPT_RUFF_PREVIEW: ${{ inputs.include-preview  }}
+
       shell: bash
 
     - name: Set step summary

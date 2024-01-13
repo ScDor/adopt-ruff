@@ -242,6 +242,7 @@ def _main(
         typer.Option(
             "--sometimes-fixable",
             help="consider sometimes-fixable rules as fixable",
+            envvar="ADOPT_RUFF_SOMETIMES_FIXABLE",
             is_flag=True,
             rich_help_panel="Rule configurations",
         ),
@@ -251,15 +252,23 @@ def _main(
         typer.Option(
             "--preview/--no-preview",
             help="include preview rules. See https://docs.astral.sh/ruff/faq/#what-is-preview",
+            envvar="ADOPT_RUFF_PREVIEW",
             is_flag=True,
             rich_help_panel="Rule configurations",
         ),
     ] = True,
     repo_name: Annotated[
-        Optional[str], typer.Option(help="The repository name, shown in the report")  # noqa: UP007
+        Optional[str],  # noqa: UP007
+        typer.Option(
+            help="The repository name, shown in the report",
+            envvar="ADOPT_RUFF_REPO_NAME",
+        ),
     ] = None,
 ):
     rules, violations, ruff_version = run_ruff()
+    logger.info(
+        f"{repo_name=}, {include_preview=}, {include_sometimes_fixable=}, {ruff_version=!s}"
+    )
     config: RuffConfig = RuffConfig.from_path(Path("pyproject.toml"), rules)
 
     result = run(

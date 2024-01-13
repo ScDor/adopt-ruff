@@ -23,7 +23,7 @@ runs:
       shell: bash
     - name: set preview arg
       run: |
-        print (${{ inputs.include-preview }})
+        print (type(${{ inputs.include-preview }}))
       shell: python
 
     - name: Run adopt-ruff

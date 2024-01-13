@@ -19,6 +19,8 @@ from adopt_ruff.utils import output_table
 
 (ARTIFACTS_PATH := Path("artifacts")).mkdir(exist_ok=True)
 
+logger.add((ARTIFACTS_PATH / "adopt-ruff.log"), level="DEBUG")
+
 
 def run_ruff() -> tuple[set[Rule], tuple[Violation, ...], Version]:
     try:
@@ -30,6 +32,7 @@ def run_ruff() -> tuple[set[Rule], tuple[Violation, ...], Version]:
                 capture_output=True,
             ).stdout.split()[1]  # ruff's output is `ruff x.y.z`
         )
+        logger.debug(f"parsed {ruff_version=!s}")
 
     except FileNotFoundError:
         logger.error("Make sure ruff is installed (pip install ruff)")
@@ -47,6 +50,7 @@ def run_ruff() -> tuple[set[Rule], tuple[Violation, ...], Version]:
             ).stdout
         )
     }
+    logger.debug(f"read {len(rules)} rules from JSON")
     violations = tuple(
         Violation(**value)
         for value in json.loads(
@@ -58,6 +62,7 @@ def run_ruff() -> tuple[set[Rule], tuple[Violation, ...], Version]:
             ).stdout
         )
     )
+    logger.debug(f"read {len(violations)} vilations from JSON")
     return rules, violations, ruff_version
 
 
@@ -266,7 +271,7 @@ def _main(
     ] = None,
 ):
     rules, violations, ruff_version = run_ruff()
-    logger.info(
+    logger.debug(
         f"{repo_name=}, {include_preview=}, {include_sometimes_fixable=}, {ruff_version=!s}"
     )
     config: RuffConfig = RuffConfig.from_path(Path("pyproject.toml"), rules)

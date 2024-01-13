@@ -2,11 +2,11 @@
 
 Adopt [Ruff](https://ruff.rs) in your repo faster 😎
 
-A tool for finding Ruff rules that are not yet configured, and can be added to your repo easily: 
+A tool for finding Ruff rules that are not yet configured, and can be added to your repository easily: 
 
-- Rules are already respected in your repository
-- Rules that can be automatically fixed by Ruff (see below)
-- All other Rules, sorted by the number of violations found in the repository
+- Rules already respected (not violated) in your repository 💪
+- Rules that can be automatically fixed by Ruff 🪄
+- Rules violated in the repository, sorted by violations count (ascending) 📈
 
 The output is a markdown report, easily viewed as a Github action summary, as well as CSV files with relevant Rule information per category. 
 
@@ -76,7 +76,7 @@ To pass arguments different than the default, use the `with` key. The values men
 ```
 
 ### Locally
-Install: `pip install git+https://github.com/ScDor/adopt-ruff@master`.\
+Install: `pip install git+https://github.com/ScDor/adopt-ruff`.\
 All arguments can be used with environment variables. Run `adopt-ruff --help` for more information. 
 
 
@@ -84,7 +84,7 @@ All arguments can be used with environment variables. Run `adopt-ruff --help` fo
 - `--path`: directory adopt-ruff will search for ruff violations.
 - `--ruff-conf-path`: Path to the `pyproject.toml` ,`ruff.toml` or `.ruff.toml`. When not provided, `adopt-ruff` will attempt to seach one of those under `path`. 
 - `--sometimes-fixable`: whether to consider sometimes-fixable rules as fixable.
-- `--preview`/`--no-preview`: weather to include preview rules.
+- `--preview`/`--no-preview`: whether to include preview rules.
 - `--repo-name`: Will be shown in the output. When not provided, won't be shown.
 
 

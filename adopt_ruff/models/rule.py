@@ -38,7 +38,6 @@ class Rule(BaseModel):
     explanation: str
     preview: bool
 
-    @property
     def as_dict(self) -> dict[str, Any]:
         return {
             "Code": self.code,

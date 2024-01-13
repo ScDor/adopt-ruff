@@ -95,7 +95,7 @@ def run(
             "they can be added right away 🚀"
         )
         output_table(
-            items=([r.as_dict for r in respected]),
+            items=([r.as_dict() for r in respected]),
             path=ARTIFACTS_PATH / "respected.csv",
             md=md,
             collapsible=True,
@@ -116,7 +116,7 @@ def run(
             f"{len(autofixable)} Ruff rules are violated in the repo, but can{always_status} be auto-fixed 🪄"
         )
         output_table(
-            items=([r.as_dict for r in autofixable]),
+            items=([r.as_dict() for r in autofixable]),
             path=ARTIFACTS_PATH / "autofixable.csv",
             md=md,
             collapsible=True,
@@ -150,7 +150,7 @@ def run(
         output_table(
             items=(
                 [
-                    r.as_dict | {"Violations": rule_to_violation_count[r]}
+                    r.as_dict() | {"Violations": rule_to_violation_count[r]}
                     for r in applicable_rules
                 ]
             ),

@@ -51,7 +51,12 @@ def output_table(
     """
     Creates a markdown table, and saves to a CSV
     """
-    md_table = tabulate(items, tablefmt="github", headers="keys")
+
+    md_table = tabulate(
+        [make_name_clickable(item) for item in items],
+        tablefmt="github",
+        headers="keys",
+    )
 
     if collapsible:
         md_table = make_collapsible(md_table, summary=collapsible_summary)
@@ -60,7 +65,13 @@ def output_table(
     table_to_csv(list(items), path)
 
 
-def search_config_file(path: Path):
+def make_name_clickable(item: dict) -> dict:
+    if not (name := item.get("Name")):
+        return item
+    return item | {"Name": f"[{name}](https://docs.astral.sh/ruff/rules/{name})"}
+
+
+def search_config_file(path: Path) -> Path | None:
     """
     Searches for common configuration files under the given directory.
     """

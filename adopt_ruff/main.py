@@ -4,6 +4,7 @@ import subprocess
 import sys
 from collections.abc import Iterable
 from pathlib import Path
+from typing import Annotated, Optional
 
 import more_itertools
 import typer
@@ -67,11 +68,8 @@ def run(
     ruff_version: Version,
     include_sometimes_fixable: bool,
     include_preview: bool,
-    repo_name: str,
+    repo_name: str | None = None,
 ) -> str:
-    logger.info(
-        f"{include_sometimes_fixable=}, {include_preview=}, {repo_name=}, {ruff_version=}"
-    )
     md = MdUtils("output")
 
     repo_name_header = f"for {repo_name} " if repo_name else ""
@@ -153,6 +151,20 @@ def run(
             collapsible=True,
         )
 
+    if not any((respected, autofixable, violated_rule_to_violations)):
+        md.new_line("You adopted Ruff well! 👏")
+        md.new_line("All rules are either selected or ignored")
+        if not include_preview:
+            md.new_line(
+                "You used --no-preview, hiding information about rules in preview-mode.\n"
+                "Consider running adopt-ruff again with the --preview, there may be more useful rules there.\n"
+                "Visit [ruff's docs](https://docs.astral.sh/ruff/faq/#what-is-preview) for more information"
+            )
+        elif not include_sometimes_fixable:
+            md.new_line(
+                "Consider running adopt-ruff again with the --sometimes-fixable flag"
+            )
+
     return md.get_md_text()
 
 
@@ -225,9 +237,27 @@ def map_rules_to_violations(
 
 
 def _main(
-    include_preview: bool,
-    include_sometimes_fixable: bool,
-    repo_name: str = "",
+    include_sometimes_fixable: Annotated[
+        bool,
+        typer.Option(
+            "--sometimes-fixable",
+            help="consider sometimes-fixable rules as fixable",
+            is_flag=True,
+            rich_help_panel="Rule configurations",
+        ),
+    ] = False,
+    include_preview: Annotated[
+        bool,
+        typer.Option(
+            "--preview/--no-preview",
+            help="include preview rules. See https://docs.astral.sh/ruff/faq/#what-is-preview",
+            is_flag=True,
+            rich_help_panel="Rule configurations",
+        ),
+    ] = True,
+    repo_name: Annotated[
+        Optional[str], typer.Option(help="The repository name, shown in the report")  # noqa: UP007
+    ] = None,
 ):
     rules, violations, ruff_version = run_ruff()
     config: RuffConfig = RuffConfig.from_path(Path("pyproject.toml"), rules)

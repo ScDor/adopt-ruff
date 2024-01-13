@@ -21,18 +21,24 @@ def make_collapsible(content: str, summary: str) -> str:
 """
 
 
-def table_to_csv(table: list[dict], path: Path):
-    if len(table) > 1 and not all(
+def table_to_csv(items: list[dict], path: Path) -> None:
+    if not items:
+        logger.warning(f"no items to write to {path.name}, skipping")
+        return
+
+    if len(items) > 1 and not all(
         # assert all keys are in the same order
-        item.keys() == table[0].keys()
-        for item in table[1:]
+        item.keys() == items[0].keys()
+        for item in items[1:]
     ):
         raise ValueError("All table row keys must be identical, and in the same order")
 
     with path.open("w") as f:
         writer = csv.writer(f)
-        writer.writerow(table[0].keys())
-        writer.writerows(item.values() for item in table)
+        writer.writerow(items[0].keys())  # Headers
+        writer.writerows(item.values() for item in items)
+
+    logger.debug(f"wrote {len(items)} to {path.absolute()!s}")
 
 
 def output_table(
@@ -54,12 +60,12 @@ def output_table(
     table_to_csv(list(items), path)
 
 
-def search_config_file(path: Path = Path()):
+def search_config_file(path: Path):
     """
     Searches for common configuration files under the given directory.
     """
     for name in ("pyproject.toml", "ruff.toml", ".ruff.toml"):
         if (file_path := path / name).exists():
-            logger.info(f"found config file at {file_path!s}")
+            logger.info(f"found config file at {file_path.resolve()!s}")
             return file_path
     return None

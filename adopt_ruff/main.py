@@ -17,7 +17,7 @@ from adopt_ruff.models.rule import FixAvailability, Rule
 from adopt_ruff.utils import ARTIFACTS_PATH, logger, output_table, search_config_file
 
 
-def run_ruff() -> tuple[set[Rule], tuple[Violation, ...], Version]:
+def run_ruff(path: Path) -> tuple[set[Rule], tuple[Violation, ...], Version]:
     try:
         ruff_version = Version(
             subprocess.run(
@@ -51,7 +51,13 @@ def run_ruff() -> tuple[set[Rule], tuple[Violation, ...], Version]:
         Violation(**value)
         for value in json.loads(
             subprocess.run(
-                ["ruff", ".", "--output-format=json", "--select=ALL", "--exit-zero"],
+                [
+                    "ruff",
+                    str(path),
+                    "--output-format=json",
+                    "--select=ALL",
+                    "--exit-zero",
+                ],
                 check=True,
                 text=True,
                 capture_output=True,
@@ -153,7 +159,7 @@ def run(
 
     if not any((respected, autofixable, violated_rule_to_violations)):
         md.new_line(
-            f"You adopted Ruff well! 👏 All {len(rules)} ruff rules are either selected or ignored."
+            f"You adopted Ruff well! 👏 {len(rules)} ruff rules are either selected or ignored."
         )
         if not include_preview:
             md.new_line(
@@ -238,16 +244,25 @@ def map_rules_to_violations(
 
 
 def _main(
+    code_path: Annotated[
+        Path,
+        typer.Option(
+            help="The directory on which ruff should be run. If not provided, the current directory will be used.",
+            envvar="ADOPT_RUFF_CODE_PATH",
+            exists=True,
+            dir_okay=True,
+            file_okay=False,
+        ),
+    ] = Path(),
     ruff_conf_path: Annotated[
         Optional[Path],  # noqa: UP007
         typer.Option(
-            help="Path to the pyproject.toml/ruff.toml file. If not provided, adopt-ruff will attempt to locate it under cwd",
+            help="Path to the pyproject.toml/ruff.toml file. If not provided, adopt-ruff will attempt to locate it.",
             envvar="ADOPT_RUFF_CONFIG_FILE_PATH",
             exists=True,
-            default_factory=search_config_file,
             dir_okay=False,
         ),
-    ],
+    ] = None,
     include_sometimes_fixable: Annotated[
         bool,
         typer.Option(
@@ -271,17 +286,22 @@ def _main(
     repo_name: Annotated[
         Optional[str],  # noqa: UP007
         typer.Option(
-            help="The repository name, shown in the report",
+            help="The repository name for the report",
             envvar="ADOPT_RUFF_REPO_NAME",
         ),
     ] = None,
 ):
-    logger.debug(
-        f"{ruff_conf_path=!s}, {include_preview=}, {include_sometimes_fixable=}, {repo_name=}"
-    )
+    logger.debug(f"{code_path.resolve()=!s}")
+    logger.debug(f"{ruff_conf_path=!s}")
+    logger.debug(f"{include_preview=}")
+    logger.debug(f"{include_sometimes_fixable=}")
+    logger.debug(f"{repo_name=}")
 
-    rules, violations, ruff_version = run_ruff()
-    config: RuffConfig = RuffConfig.from_file(ruff_conf_path, rules)
+    rules, violations, ruff_version = run_ruff(code_path)
+    config: RuffConfig = RuffConfig.from_file(
+        path=ruff_conf_path or search_config_file(code_path),
+        rules=rules,
+    )
 
     result = run(
         rules=rules,

@@ -2,9 +2,15 @@ name: "adopt-ruff"
 
 description: "Adopt ruff easily"
 inputs:
-  version:
-    description: "adopt-ruff version to use"
+  ref:
+    description: "adopt-ruff reference to install"
     default: master
+  path:
+    description: "directory adopt-ruff will search for ruff violations. Default is CWD."
+    default: "."
+  config-file-path:
+    description: "Path to the pyproject.toml/ruff.toml file. If not provided, adopt-ruff will attempt to locate it under cwd"
+    default: ""
   repo-name:
     description: "name of the repository being checked"
     default: ${{  github.repository  }}
@@ -19,20 +25,19 @@ runs:
   using: "composite"
   steps:
     - name: Install adopt-ruff
-      run: pip install git+https://github.com/ScDor/adopt-ruff@${{inputs.version}} -q
+      run: pip install git+https://github.com/ScDor/adopt-ruff@${{inputs.ref}} -q
       shell: bash
 
     - name: Run adopt-ruff
-      run: adopt-ruff
+      run: |
+        adopt-ruff
+        cat result.md > $GITHUB_STEP_SUMMARY
       env:
         ADOPT_RUFF_REPO_NAME: ${{ inputs.repo-name  }}
         ADOPT_RUFF_SOMETIMES_FIXABLE: ${{ inputs.include-sometimes-fixable  }}
         ADOPT_RUFF_PREVIEW: ${{ inputs.include-preview  }}
-
-      shell: bash
-
-    - name: Set step summary
-      run: cat result.md > $GITHUB_STEP_SUMMARY
+        ADOPT_RUFF_CODE_PATH: ${{ inputs.path  }}
+        ADOPT_RUFF_CONFIG_FILE_PATH: ${{ inputs.config-file-path  }}
       shell: bash
 
     - uses: actions/upload-artifact@v4

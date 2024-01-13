@@ -76,8 +76,8 @@ To pass arguments different than the default, use the `with` key. The values men
 ```
 
 ### Locally
-Install: `pip install git+https://github.com/ScDor/adopt-ruff`.\
-All arguments can be used with environment variables. Run `adopt-ruff --help` for more information. 
+Install by running `pip install git+https://github.com/ScDor/adopt-ruff`.\
+Run `adopt-ruff --help` for more information.\
 
 
 #### Arguments
@@ -88,7 +88,8 @@ All arguments can be used with environment variables. Run `adopt-ruff --help` fo
 - `--repo-name`: Will be shown in the output. When not provided, won't be shown.
 
 
-## Output Example: adopt-ruff report for ScDor/my-dummy-repo (ruff 0.1.13)
+# Output Example
+## adopt-ruff report for ScDor/my-dummy-repo (ruff 0.1.13)
 
 ## Respected Ruff rules
   

@@ -276,7 +276,9 @@ def _main(
         ),
     ] = None,
 ):
-    logger.debug(f"{include_preview=}, {include_sometimes_fixable=}, {repo_name=}")
+    logger.debug(
+        f"{ruff_conf_path=!s}, {include_preview=}, {include_sometimes_fixable=}, {repo_name=}"
+    )
 
     rules, violations, ruff_version = run_ruff()
     config: RuffConfig = RuffConfig.from_file(ruff_conf_path, rules)

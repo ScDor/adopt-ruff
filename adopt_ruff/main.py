@@ -166,12 +166,12 @@ def run(
         if not include_preview:
             md.new_line(
                 "You used --no-preview, ignoring rules in preview-mode.\n"
-                "Consider running adopt-ruff again with the --preview, there may be more useful rules there.\n"
+                "Consider running adopt-ruff again with the `--preview` flag: there may be more useful rules there 🔍\n"
                 "Visit ⚡[Ruff's docs](https://docs.astral.sh/ruff/faq/#what-is-preview) for more information."
             )
         elif not include_sometimes_fixable:
             md.new_line(
-                "Consider running adopt-ruff again with the --sometimes-fixable flag"
+                "Consider running adopt-ruff again with the `--sometimes-fixable flag`"
             )
 
     md.new_line(

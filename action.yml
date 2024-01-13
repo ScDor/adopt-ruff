@@ -21,9 +21,15 @@ runs:
     - name: Install adopt-ruff
       run: pip install git+https://github.com/ScDor/adopt-ruff@${{inputs.version}} -q
       shell: bash
+    - name: set preview arg
+      run: |
+        import os
+        print(os.environ().keys())
+      shell: python
 
     - name: Run adopt-ruff
-      run: adopt-ruff --repo-name=${{inputs.repo-name}} --include-sometimes-fixable=${{inputs.include-sometimes-fixable}} --include-preview=${{inputs.include-preview}}
+      run: | 
+        adopt-ruff --repo-name=${{inputs.repo-name}} --sometimes-fixable=${{inputs.include-sometimes-fixable}}
       shell: bash
 
     - name: Set step summary

@@ -88,7 +88,7 @@ All arguments can be used with environment variables. Run `adopt-ruff --help` fo
 - `--repo-name`: Will be shown in the output. When not provided, won't be shown.
 
 
-## Output Example: adopt-ruff report for ScDor/adopt-ruff-testing (ruff 0.1.13)
+## Output Example: adopt-ruff report for ScDor/my-dummy-repo (ruff 0.1.13)
 
 ## Respected Ruff rules
   

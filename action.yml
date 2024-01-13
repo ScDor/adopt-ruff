@@ -26,7 +26,7 @@ runs:
       run: |
         import os
         preview = {True: "--preview", False: "--no-preview"}[${{ inputs.include-preview }}]
-        open(os.environ['GITHUB_ENV']).write(f"PREVIEW={preview}")
+        open(os.environ['GITHUB_ENV'],'a').write(f"PREVIEW={preview}")
       shell: python
 
     - name: Run adopt-ruff

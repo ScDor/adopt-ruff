@@ -5,6 +5,7 @@ from pathlib import Path
 from pydantic import BaseModel
 
 from adopt_ruff.models.rule import Rule
+from adopt_ruff.utils import logger
 
 MIN_RULE_CODE_LEN = 4
 DEFAULT_SELECT_RULES = ("E", "F")
@@ -55,6 +56,7 @@ class RuffConfig(BaseModel, frozen=True):
 
     @staticmethod
     def from_path(path: Path, rules: Iterable[Rule]) -> "RuffConfig":
+        logger.debug(f"reading ruff config file from {path!s}")
         raw = RawRuffConfig.from_path(path)
         rules = tuple(rules)
         return RuffConfig(
@@ -67,7 +69,7 @@ class RuffConfig(BaseModel, frozen=True):
         return set(self.selected_rules + self.ignored_rules)
 
 
-def _parse_raw_rules(codes: Iterable[str], rules: tuple[Rule, ...]) -> tuple[Rule, ...]:
+def _parse_raw_rules(codes: set[str], rules: tuple[Rule, ...]) -> tuple[Rule, ...]:
     """
     Convert code values (E401), categories (E) and ALL, into Rule objects
     """
@@ -79,11 +81,15 @@ def _parse_raw_rules(codes: Iterable[str], rules: tuple[Rule, ...]) -> tuple[Rul
 
     for code in codes:
         if code.isalpha() or len(code) < MIN_RULE_CODE_LEN:
-            # If it's a category name, add all rules
-            result.extend(
+            code_rules = tuple(
                 rule for rule in rules if rule.code.removeprefix(code).isnumeric()
-            )  # TODO check
-            # TODO handle cases of category names of len>=MIN_RULE_CODE_LEN, mixing alpha&digits.
+            )
+            logger.debug(
+                f"assuming {code} is a category, adding {len(code_rules)} rules: {sorted(r.code for r in code_rules)!s}"
+            )
+            result.extend(code_rules)
+            # TODO are there cases of category names with len>=MIN_RULE_CODE_LEN, mixing alpha&digits?
         else:
             result.append(code_to_rule[code])
+    logger.debug(f"parsed {len(codes)} codes into {len(result)} rules")
     return tuple(result)

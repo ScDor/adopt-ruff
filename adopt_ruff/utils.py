@@ -2,8 +2,13 @@ import csv
 from collections.abc import Iterable
 from pathlib import Path
 
+from loguru import logger
 from mdutils.mdutils import MdUtils
 from tabulate import tabulate
+
+(ARTIFACTS_PATH := Path("artifacts")).mkdir(exist_ok=True)
+
+logger.add((ARTIFACTS_PATH / "adopt-ruff.log"), level="TRACE")
 
 
 def make_collapsible(content: str, summary: str) -> str:

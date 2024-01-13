@@ -52,3 +52,14 @@ def output_table(
 
     md.new_line(md_table)
     table_to_csv(list(items), path)
+
+
+def search_config_file(path: Path = Path()):
+    """
+    Searches for common configuration files under the given directory.
+    """
+    for name in ("pyproject.toml", "ruff.toml", ".ruff.toml"):
+        if (file_path := path / name).exists():
+            logger.info(f"found config file at {file_path!s}")
+            return file_path
+    return None

@@ -14,7 +14,7 @@ from packaging.version import Version
 from adopt_ruff.models.ruff_config import RuffConfig
 from adopt_ruff.models.ruff_output import Violation
 from adopt_ruff.models.rule import FixAvailability, Rule
-from adopt_ruff.utils import ARTIFACTS_PATH, logger, output_table
+from adopt_ruff.utils import ARTIFACTS_PATH, logger, output_table, search_config_file
 
 
 def run_ruff() -> tuple[set[Rule], tuple[Violation, ...], Version]:
@@ -238,6 +238,16 @@ def map_rules_to_violations(
 
 
 def _main(
+    ruff_conf_path: Annotated[
+        Optional[Path],  # noqa: UP007
+        typer.Option(
+            help="Path to the pyproject.toml/ruff.toml file. If not provided, adopt-ruff will attempt to locate it under cwd",
+            envvar="ADOPT_RUFF_CONFIG_FILE_PATH",
+            exists=True,
+            default_factory=search_config_file,
+            dir_okay=False,
+        ),
+    ],
     include_sometimes_fixable: Annotated[
         bool,
         typer.Option(
@@ -263,15 +273,6 @@ def _main(
         typer.Option(
             help="The repository name, shown in the report",
             envvar="ADOPT_RUFF_REPO_NAME",
-        ),
-    ] = None,
-    ruff_conf_path: Annotated[
-        Optional[Path],  # noqa: UP007
-        typer.Option(
-            help="Path to the pyproject.toml/ruff.toml file",
-            envvar="ADOPT_RUFF_CONFIG_FILE_PATH",
-            exists=True,
-            dir_okay=False,
         ),
     ] = None,
 ):

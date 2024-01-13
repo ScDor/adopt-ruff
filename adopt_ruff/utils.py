@@ -8,7 +8,7 @@ from tabulate import tabulate
 
 (ARTIFACTS_PATH := Path("artifacts")).mkdir(exist_ok=True)
 
-logger.add((ARTIFACTS_PATH / "adopt-ruff.log"), level="TRACE")
+logger.add((ARTIFACTS_PATH / "adopt-ruff.log"), level="DEBUG")
 
 
 def make_collapsible(content: str, summary: str) -> str:

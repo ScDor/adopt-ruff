@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel
 
@@ -24,9 +24,10 @@ class FixAvailability(Enum):
                 raise ValueError
 
 
-class Rule(BaseModel, frozen=True):
+class Rule(BaseModel):
     class Config:
-        use_enum_values: True
+        frozen = True
+        use_enum_values: Literal[True]
 
     name: str
     code: str

@@ -152,13 +152,14 @@ def run(
         )
 
     if not any((respected, autofixable, violated_rule_to_violations)):
-        md.new_line("You adopted Ruff well! 👏")
-        md.new_line("All rules are either selected or ignored")
+        md.new_line(
+            f"You adopted Ruff well! 👏 All {len(rules)} ruff rules are either selected or ignored."
+        )
         if not include_preview:
             md.new_line(
-                "You used --no-preview, hiding information about rules in preview-mode.\n"
+                "You used --no-preview, ignoring rules in preview-mode.\n"
                 "Consider running adopt-ruff again with the --preview, there may be more useful rules there.\n"
-                "Visit [ruff's docs](https://docs.astral.sh/ruff/faq/#what-is-preview) for more information"
+                "Visit ⚡[Ruff's docs](https://docs.astral.sh/ruff/faq/#what-is-preview) for more information."
             )
         elif not include_sometimes_fixable:
             md.new_line(
@@ -264,16 +265,25 @@ def _main(
             envvar="ADOPT_RUFF_REPO_NAME",
         ),
     ] = None,
+    ruff_conf_path: Annotated[
+        Optional[Path],  # noqa: UP007
+        typer.Option(
+            help="Path to the pyproject.toml/ruff.toml file",
+            envvar="ADOPT_RUFF_CONFIG_FILE_PATH",
+            exists=True,
+            dir_okay=False,
+        ),
+    ] = None,
 ):
     logger.debug(f"{include_preview=}, {include_sometimes_fixable=}, {repo_name=}")
 
     rules, violations, ruff_version = run_ruff()
-    config: RuffConfig = RuffConfig.from_path(Path("pyproject.toml"), rules)
+    config: RuffConfig = RuffConfig.from_file(ruff_conf_path, rules)
 
     result = run(
-        rules,
-        violations,
-        config,
+        rules=rules,
+        violations=violations,
+        config=config,
         ruff_version=ruff_version,
         include_preview=include_preview,
         include_sometimes_fixable=include_sometimes_fixable,
@@ -281,7 +291,7 @@ def _main(
     )
 
     Path("result.md").write_text(result)
-    logger.success("wrote output to result.md")
+    logger.debug("wrote output to result.md")
 
 
 def main():

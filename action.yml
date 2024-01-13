@@ -23,12 +23,11 @@ runs:
       shell: bash
     - name: set preview arg
       run: |
-        import os
-        print(os.environ)
+        print (${{ inputs.include-preview }})
       shell: python
 
     - name: Run adopt-ruff
-      run: | 
+      run: |
         adopt-ruff --repo-name=${{inputs.repo-name}} --sometimes-fixable=${{inputs.include-sometimes-fixable}}
       shell: bash
 

@@ -24,6 +24,7 @@ runs:
     - name: set preview arg
       id: preview-arg
       run: |
+        import os
         preview = {True: "--preview", False: "--no-preview"}[${{ inputs.include-preview }}]
         open(os.environ['GITHUB_ENV']).write(f"PREVIEW={preview}")
       shell: python

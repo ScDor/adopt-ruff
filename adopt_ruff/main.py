@@ -10,6 +10,7 @@ import more_itertools
 import typer
 from mdutils.mdutils import MdUtils
 from packaging.version import Version
+from tabulate import tabulate
 
 from adopt_ruff.models.ruff_config import RuffConfig
 from adopt_ruff.models.ruff_output import Violation
@@ -110,8 +111,9 @@ def run(
         )
     ):
         md.new_header(2, "Autofixable Ruff rules")
+        always_status = " (sometimes)" if include_sometimes_fixable else ""
         md.new_line(
-            f"{len(autofixable)} Ruff rules are violated in the repo, but can be auto-fixed 🪄"
+            f"{len(autofixable)} Ruff rules are violated in the repo, but can{always_status} be auto-fixed 🪄"
         )
         output_table(
             items=([r.as_dict for r in autofixable]),
@@ -172,6 +174,16 @@ def run(
                 "Consider running adopt-ruff again with the --sometimes-fixable flag"
             )
 
+    md.new_line(
+        tabulate(
+            [
+                ["Include sometimes-fixable rules", include_sometimes_fixable],
+                ["Include preview rules", include_preview],
+            ],
+            tablefmt="github",
+            headers=["Configuration", "Value"],
+        )
+    )
     return md.get_md_text()
 
 

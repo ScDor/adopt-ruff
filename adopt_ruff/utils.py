@@ -12,7 +12,8 @@ def make_collapsible(content: str, summary: str) -> str:
 
 {content}
 
-</details>"""
+</details>
+"""
 
 
 def table_to_csv(table: list[dict], path: Path):

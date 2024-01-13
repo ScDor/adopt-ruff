@@ -8,18 +8,13 @@ from typing import Annotated, Optional
 
 import more_itertools
 import typer
-from loguru import logger
 from mdutils.mdutils import MdUtils
 from packaging.version import Version
 
 from adopt_ruff.models.ruff_config import RuffConfig
 from adopt_ruff.models.ruff_output import Violation
 from adopt_ruff.models.rule import FixAvailability, Rule
-from adopt_ruff.utils import output_table
-
-(ARTIFACTS_PATH := Path("artifacts")).mkdir(exist_ok=True)
-
-logger.add((ARTIFACTS_PATH / "adopt-ruff.log"), level="DEBUG")
+from adopt_ruff.utils import ARTIFACTS_PATH, logger, output_table
 
 
 def run_ruff() -> tuple[set[Rule], tuple[Violation, ...], Version]:
@@ -50,7 +45,8 @@ def run_ruff() -> tuple[set[Rule], tuple[Violation, ...], Version]:
             ).stdout
         )
     }
-    logger.debug(f"read {len(rules)} rules from JSON")
+    logger.debug(f"read {len(rules)} rules from JSON output")
+
     violations = tuple(
         Violation(**value)
         for value in json.loads(
@@ -62,7 +58,7 @@ def run_ruff() -> tuple[set[Rule], tuple[Violation, ...], Version]:
             ).stdout
         )
     )
-    logger.debug(f"read {len(violations)} vilations from JSON")
+    logger.debug(f"read {len(violations)} violations from JSON output")
     return rules, violations, ruff_version
 
 
@@ -106,7 +102,6 @@ def run(
             include_sometimes_fixable,
             include_preview,
         )
-        # TODO pass args
     ):
         md.new_header(2, "Autofixable Ruff rules")
         md.new_line(
@@ -270,10 +265,9 @@ def _main(
         ),
     ] = None,
 ):
+    logger.debug(f"{include_preview=}, {include_sometimes_fixable=}, {repo_name=}")
+
     rules, violations, ruff_version = run_ruff()
-    logger.debug(
-        f"{repo_name=}, {include_preview=}, {include_sometimes_fixable=}, {ruff_version=!s}"
-    )
     config: RuffConfig = RuffConfig.from_path(Path("pyproject.toml"), rules)
 
     result = run(
@@ -287,6 +281,7 @@ def _main(
     )
 
     Path("result.md").write_text(result)
+    logger.success("wrote output to result.md")
 
 
 def main():

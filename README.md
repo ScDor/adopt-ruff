@@ -5,11 +5,14 @@ Adopt [Ruff⚡](https://ruff.rs) in your repo faster 😎
 
 A tool for finding Ruff rules that are not yet configured, and can be added to your repository easily: 
 
-- Rules already respected (not violated) in your repository 💪
-- Rules that can be automatically fixed by Ruff 🪄
-- Rules violated in the repository, sorted by violations count (ascending) 📈
+- Rules your code already follows 👏
+- Rules that can be automatically fixed by Ruff 🪄 
+- Rules violated in the repository, sorted by ascending violation count 🔎
 
-The output is a markdown report, easily viewed as a Github action summary, as well as CSV files with relevant Rule information per category. 
+The output is a markdown report, easy to check as a Github action summary and CSV files with relevant Rule information per category.
+
+_See example at the bottom of this page_
+
 
 
 ## Configurations
@@ -89,7 +92,7 @@ Run `adopt-ruff --help` for more information.\
 - `--repo-name`: Will be shown in the output. When not provided, won't be shown.
 
 
-# Output Example
+# Report Example
 ## adopt-ruff report for ScDor/my-dummy-repo (ruff 0.1.13)
 
 ## Respected Ruff rules

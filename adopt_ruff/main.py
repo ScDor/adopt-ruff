@@ -86,7 +86,12 @@ def run(
     configured_rules = config.all_rules
 
     if respected := sorted(
-        respected_rules(violations, rules, configured_rules),
+        respected_rules(
+            violations,
+            rules,
+            configured_rules,
+            include_preview,
+        ),
         key=lambda rule: rule.code,
     ):
         md.new_header(2, "Respected Ruff rules")
@@ -131,6 +136,7 @@ def run(
                     (configured_rules, respected, autofixable)
                 )
             ),
+            include_preview=include_preview,
         )
     ):
         rule_to_violation_count = {
@@ -195,13 +201,16 @@ def respected_rules(
     violations: tuple[Violation, ...],
     rules: Iterable[Rule],
     configured_rules: set[Rule],
+    include_preview: bool,
 ) -> set[Rule]:
     violated_codes = {v.code for v in violations}
 
     return {
         rule
         for rule in rules
-        if (rule.code not in violated_codes) and (rule not in configured_rules)
+        if (rule.code not in violated_codes)
+        and (rule not in configured_rules)
+        and (include_preview or (not rule.preview))
     }
 
 
@@ -233,12 +242,13 @@ def violated_rules(
     violations: tuple[Violation, ...],
     rules: set[Rule],
     excluded_rules: Iterable[Rule],
+    include_preview: bool,
 ) -> dict[Rule, tuple[Violation, ...]]:
     ignore_codes = {rule.code for rule in excluded_rules}
     return {
         rule: violations
         for rule, violations in map_rules_to_violations(rules, violations).items()
-        if rule.code not in ignore_codes
+        if (rule.code not in ignore_codes) and (include_preview or (not rule.preview))
     }
 
 

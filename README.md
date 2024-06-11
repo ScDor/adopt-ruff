@@ -3,10 +3,10 @@
 
 Adopt [Ruff⚡](https://ruff.rs) in your repo faster 😎
 
-A tool for finding Ruff rules that are not yet configured, and can be added to your repository easily: 
+A tool for finding Ruff rules that are not yet configured, and can be added to your repository easily:
 
 - Rules your code already follows 👏
-- Rules that can be automatically fixed by Ruff 🪄 
+- Rules that can be automatically fixed by Ruff 🪄
 - Rules violated in the repository, sorted by ascending violation count 🔎
 
 The output is a markdown report, easy to check as a Github action summary and CSV files with relevant Rule information per category.
@@ -16,10 +16,10 @@ _See example at the bottom of this page_
 
 
 ## Configurations
-To decide whether to consider a rule, `adopt-ruff` uses arguments. See below on how to configure them. 
+To decide whether to consider a rule, `adopt-ruff` uses arguments. See below on how to configure them.
 
 - Ruff considers some new or experimental rules `in preview`. These should be used with caution. You can choose whether `adopt-ruff` considers them or not. Read more about Ruff's preview [here](https://docs.astral.sh/ruff/preview/).
-- Ruff supports many autofixable rules - some are always autofixable, and some can only be autofixed by Ruff in specific cases. It's up to you whether to consider "sometimes-autofixable" as autofixable. 
+- Ruff supports many autofixable rules - some are always autofixable, and some can only be autofixed by Ruff in specific cases. It's up to you whether to consider "sometimes-autofixable" as autofixable.
 
 ## Usage
 
@@ -36,33 +36,33 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-      
+
       - name: Set up python
         id: setup-python
         uses: actions/setup-python@v5
-        with: 
+        with:
           python-version: 3.x
-  
-      - name: Install ruff 
+
+      - name: Install ruff
         run: pip install ruff
 
       - name: Run the adopt-ruff action
         uses: ScDor/adopt-ruff@master
-         
+
 ```
 Now, manually trigger the workflow from the `Actions` panel of your repository.\
  _Learn more about manually triggering a workflow [here](https://docs.github.com/en/actions/using-workflows/manually-running-a-workflow)._
 
-When the action is done running, head to the [job summary](https://github.blog/wp-content/uploads/2022/05/newjobsummary.png) to watch the report. 
+When the action is done running, head to the [job summary](https://github.blog/wp-content/uploads/2022/05/newjobsummary.png) to watch the report.
 
 The output tables are also availalbe as CSV files, under `Artifacts`.
 
 Re-run this action to get insights about applicable rules when Ruff updates with more exciting rules ⚡
 
 #### Notes:
-- This flow always installs Ruff's latest version. If your project already has Ruff as a dependency (i.e. in `pyproject.toml` or `requirements.txt`), replace the `Install ruff` step with an appropriate command. 
+- This flow always installs Ruff's latest version. If your project already has Ruff as a dependency (i.e. in `pyproject.toml` or `requirements.txt`), replace the `Install ruff` step with an appropriate command.
 
-- adopt-ruff calls Ruff, assuming it's installed in the environment. adopt-ruff will fail if ruff is not found. 
+- adopt-ruff calls Ruff, assuming it's installed in the environment. adopt-ruff will fail if ruff is not found.
 
 
 #### Arguments
@@ -86,7 +86,7 @@ Run `adopt-ruff --help` for more information.\
 
 #### Arguments
 - `--path`: directory adopt-ruff will search for ruff violations.
-- `--ruff-conf-path`: Path to the `pyproject.toml` ,`ruff.toml` or `.ruff.toml`. When not provided, `adopt-ruff` will attempt to seach one of those under `path`. 
+- `--ruff-conf-path`: Path to the `pyproject.toml` ,`ruff.toml` or `.ruff.toml`. When not provided, `adopt-ruff` will attempt to seach one of those under `path`.
 - `--sometimes-fixable`: whether to consider sometimes-fixable rules as fixable.
 - `--preview`/`--no-preview`: whether to include preview rules.
 - `--repo-name`: Will be shown in the output. When not provided, won't be shown.
@@ -96,8 +96,8 @@ Run `adopt-ruff --help` for more information.\
 ## adopt-ruff report for ScDor/my-dummy-repo (ruff 0.1.13)
 
 ## Respected Ruff rules
-  
-374 Ruff rules are already respected in the repo - they can be added right away 🚀  
+
+374 Ruff rules are already respected in the repo - they can be added right away 🚀
 <details>
 <summary>Details</summary>
 
@@ -114,8 +114,8 @@ Run `adopt-ruff --help` for more information.\
 </details>
 
 ## Autofixable Ruff rules
-  
-65 Ruff rules are violated in the repo, but can be auto-fixed 🪄  
+
+65 Ruff rules are violated in the repo, but can be auto-fixed 🪄
 <details>
 <summary>Details</summary>
 
@@ -130,8 +130,8 @@ Run `adopt-ruff --help` for more information.\
 </details>
 
 ## Applicable Rules
-  
-194 other Ruff rules are not yet configured in the repository  
+
+194 other Ruff rules are not yet configured in the repository
 <details>
 <summary>Details</summary>
 
@@ -155,7 +155,7 @@ Run `adopt-ruff --help` for more information.\
 (table truncated for example purposes)
 
 </details>
-  
+
 | Configuration                   | Value   |
 |---------------------------------|---------|
 | Include sometimes-fixable rules | False   |

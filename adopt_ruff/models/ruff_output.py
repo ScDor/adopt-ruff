@@ -3,24 +3,24 @@ from __future__ import annotations
 from pydantic import BaseModel
 
 
-class Location(BaseModel, frozen=True):
+class Location(BaseModel):
     column: int
     row: int
 
 
-class Edit(BaseModel, frozen=True):
+class Edit(BaseModel):
     content: str
     end_location: Location
     location: Location
 
 
-class Fix(BaseModel, frozen=True):
+class Fix(BaseModel):
     applicability: str
     edits: tuple[Edit, ...]
     message: str
 
 
-class Violation(BaseModel, frozen=True):
+class Violation(BaseModel):
     cell: None  # TODO handle notebook output
     code: str
     end_location: Location

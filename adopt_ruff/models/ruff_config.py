@@ -10,7 +10,7 @@ MIN_RULE_CODE_LEN = 4
 DEFAULT_SELECT_RULES = ("E", "F")
 
 
-class RawRuffConfig(BaseModel, frozen=True):
+class RawRuffConfig(BaseModel):
     selected_codes: set[str]
     ignored_codes: set[str]
 
@@ -57,7 +57,7 @@ class RawRuffConfig(BaseModel, frozen=True):
         )
 
 
-class RuffConfig(BaseModel, frozen=True):
+class RuffConfig(BaseModel):
     selected_rules: set[Rule]
     ignored_rules: set[Rule]
 

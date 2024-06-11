@@ -4,6 +4,9 @@ on:
   pull_request:
   schedule:
     - cron: '0 0 * * *'
+  push:
+    branches:
+      - main
 
 jobs:
   adopt-ruff:

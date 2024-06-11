@@ -53,7 +53,7 @@ def run_ruff(path: Path) -> tuple[set[Rule], tuple[Violation, ...], Version]:
         for value in json.loads(
             subprocess.run(
                 [
-                    "ruff",
+                    *["ruff" if ruff_version < Version("0.3.0") else "ruff", "check"],
                     str(path),
                     "--output-format=json",
                     "--select=ALL",

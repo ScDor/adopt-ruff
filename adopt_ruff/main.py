@@ -19,6 +19,8 @@ from adopt_ruff.utils import ARTIFACTS_PATH, logger, output_table, search_config
 
 
 def run_ruff(path: Path) -> tuple[set[Rule], tuple[Violation, ...], Version]:
+    logger.debug(f"system encoding={sys.getdefaultencoding()}")
+
     try:
         ruff_version = Version(
             subprocess.run(

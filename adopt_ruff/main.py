@@ -34,6 +34,8 @@ def run_ruff(path: Path) -> tuple[set[Rule], tuple[Violation, ...], Version]:
         logger.error("Make sure ruff is installed (pip install ruff)")
         sys.exit(1)
 
+    logger.debug(f"system encoding={sys.getdefaultencoding()}")
+
     # Now when ruff is found, assume the following commands will run properly
     rule_output = subprocess.run(
         ["ruff", "rule", "--all", "--output-format=json"],

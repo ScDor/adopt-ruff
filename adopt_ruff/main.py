@@ -35,36 +35,33 @@ def run_ruff(path: Path) -> tuple[set[Rule], tuple[Violation, ...], Version]:
         sys.exit(1)
 
     # Now when ruff is found, assume the following commands will run properly
-    rules = {
-        Rule(**value)
-        for value in json.loads(
-            subprocess.run(
-                ["ruff", "rule", "--all", "--output-format=json"],
-                check=True,
-                text=True,
-                capture_output=True,
-            ).stdout
-        )
-    }
+    rule_output = subprocess.run(
+        ["ruff", "rule", "--all", "--output-format=json"],
+        check=True,
+        text=True,
+        capture_output=True,
+    ).stdout
+    logger.debug(f"{rule_output=}")
+
+    rules = {Rule(**value) for value in json.loads(rule_output)}
     logger.debug(f"read {len(rules)} rules from JSON output")
 
-    violations = tuple(
-        Violation(**value)
-        for value in json.loads(
-            subprocess.run(
-                [
-                    *["ruff" if ruff_version < Version("0.3.0") else "ruff", "check"],
-                    str(path),
-                    "--output-format=json",
-                    "--select=ALL",
-                    "--exit-zero",
-                ],
-                check=True,
-                text=True,
-                capture_output=True,
-            ).stdout
-        )
-    )
+    violation_output = subprocess.run(
+        [
+            *["ruff" if ruff_version < Version("0.3.0") else "ruff", "check"],
+            str(path),
+            "--output-format=json",
+            "--select=ALL",
+            "--exit-zero",
+        ],
+        check=True,
+        text=True,
+        capture_output=True,
+    ).stdout
+
+    logger.debug(f"{violation_output=}")
+
+    violations = tuple(Violation(**value) for value in json.loads(violation_output))
     logger.debug(f"read {len(violations)} violations from JSON output")
     return rules, violations, ruff_version
 

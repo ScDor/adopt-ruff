@@ -12,7 +12,7 @@ tabulate = "^0.9"
 mdutils = "^1.6"
 loguru = "^0.7"
 packaging = "^24.0"
-typer = {extras = ["all"], version = "^0.12"}
+typer = "^0.12"
 more-itertools = "^10.2.0"
 
 

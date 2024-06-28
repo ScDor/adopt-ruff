@@ -11,8 +11,8 @@ pydantic = "^2.5"
 tabulate = "^0.9"
 mdutils = "^1.6"
 loguru = "^0.7"
-packaging = "^23.2"
-typer = { extras = ["all"], version = "^0.9" }
+packaging = "^24.0"
+typer = {extras = ["all"], version = "^0.12"}
 more-itertools = "^10.2.0"
 
 
@@ -30,6 +30,8 @@ adopt-ruff = "adopt_ruff.main:main"
 
 [tool.ruff]
 target-version = "py311"
+
+[tool.ruff.lint]
 select = ["ALL"]
 ignore = [
     "ISC001",

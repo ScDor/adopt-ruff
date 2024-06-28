@@ -4,3 +4,4 @@ __pycache__
 /violations.json
 /result.md
 /artifacts
+.python-version

@@ -28,6 +28,7 @@ def run_ruff(path: Path) -> tuple[set[Rule], tuple[Violation, ...], Version]:
                 check=True,
                 text=True,
                 capture_output=True,
+                encoding="utf8",
             ).stdout.split()[1]  # ruff's output is `ruff x.y.z`
         )
         logger.debug(f"parsed {ruff_version=!s}")
@@ -44,6 +45,7 @@ def run_ruff(path: Path) -> tuple[set[Rule], tuple[Violation, ...], Version]:
         check=True,
         text=True,
         capture_output=True,
+        encoding="utf8",
     ).stdout
     logger.debug(f"{rule_output=}")
 
@@ -57,6 +59,7 @@ def run_ruff(path: Path) -> tuple[set[Rule], tuple[Violation, ...], Version]:
             "--output-format=json",
             "--select=ALL",
             "--exit-zero",
+            "encoding=utf8",
         ],
         check=True,
         text=True,

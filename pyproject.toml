@@ -1,32 +1,35 @@
-[tool.poetry]
+[project]
 name = "adopt-ruff"
 version = "0.1.0"
-authors = ["ScDor"]
 description = "Adopt Ruff faster"
 readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "loguru>=0.7.3",
+    "mdutils>=1.6.0",
+    "more-itertools>=10.5.0",
+    "packaging>=24.2",
+    "pydantic>=2.10.4",
+    "tabulate>=0.9.0",
+    "typer>=0.15.1",
+]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-pydantic = "^2.5"
-tabulate = "^0.9"
-mdutils = "^1.6"
-loguru = "^0.7"
-packaging = "^24.0"
-typer = "^0.12"
-more-itertools = "^10.2.0"
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-
-[tool.poetry.group.dev.dependencies]
-pre-commit = "^3.6.0"
-ruff = "<=1.0"
-mypy = "^1.8"
-
-
-[tool.poetry.group.typing.dependencies]
-types-tabulate = "^0.9"
-
-[tool.poetry.scripts]
+[dependency-groups]
+dev = [
+    "mypy>=1.14.0",
+    "pre-commit>=4.0.1",
+    "ruff>=0.8.4",
+]
+typing = [
+    "types-tabulate>=0.9.0.20241207",
+]
+[project.scripts]
 adopt-ruff = "adopt_ruff.main:main"
+
 
 [tool.ruff]
 target-version = "py311"
@@ -59,6 +62,3 @@ ignore = [
     "S607",
     "PLR0913",
 ]
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"

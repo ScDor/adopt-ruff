@@ -17,7 +17,7 @@ class Edit(BaseModel):
 class Fix(BaseModel):
     applicability: str
     edits: tuple[Edit, ...]
-    message: str
+    message: str | None
 
 
 class Violation(BaseModel):

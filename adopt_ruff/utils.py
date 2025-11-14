@@ -1,4 +1,6 @@
 import csv
+import re
+from collections import defaultdict
 from collections.abc import Iterable
 from pathlib import Path
 
@@ -80,3 +82,72 @@ def search_config_file(path: Path) -> Path | None:
             logger.info(f"found config file at {file_path.resolve()!s}")
             return file_path
     return None
+
+
+def extract_category_prefix(code: str) -> str:
+    """
+    Extracts the category prefix from a rule code.
+    Examples: RUF001 -> RUF, B010 -> B, ASYNC100 -> ASYNC
+    """
+    match = re.match(r"^([A-Z]+)", code)
+    return match.group(1) if match else code
+
+
+def find_complete_categories(rules: Iterable, all_rules: set) -> dict[str, tuple[str, int]]:
+    """
+    Finds categories where ALL rules from that category are in the given set.
+
+    Args:
+        rules: The rules in the current situation (e.g., autofixable, respected)
+        all_rules: All available rules
+
+    Returns:
+        Dict mapping category prefix to (linter_name, count)
+    """
+    from adopt_ruff.models.rule import Rule
+
+    rules_list = list(rules) if not isinstance(rules, list) else rules
+
+    # Group all rules by category
+    all_by_category: dict[str, list[Rule]] = defaultdict(list)
+    for rule in all_rules:
+        prefix = extract_category_prefix(rule.code)
+        all_by_category[prefix].append(rule)
+
+    # Group current situation rules by category
+    current_by_category: dict[str, list[Rule]] = defaultdict(list)
+    for rule in rules_list:
+        prefix = extract_category_prefix(rule.code)
+        current_by_category[prefix].append(rule)
+
+    # Find complete categories (all rules from category are in current situation)
+    complete_categories = {}
+    for prefix, current_rules in current_by_category.items():
+        all_in_category = all_by_category[prefix]
+        if len(current_rules) == len(all_in_category) and len(current_rules) > 0:
+            # All rules from this category are in the current situation
+            linter_name = current_rules[0].linter
+            complete_categories[prefix] = (linter_name, len(current_rules))
+
+    return complete_categories
+
+
+def generate_pyproject_suggestion(category_prefixes: list[str], section: str) -> str:
+    """
+    Generates a pyproject.toml configuration suggestion.
+
+    Args:
+        category_prefixes: List of category prefixes (e.g., ["RUF", "ASYNC"])
+        section: Either "select" for respected/autofixable or "ignore" for applicable
+
+    Returns:
+        Formatted configuration suggestion
+    """
+    if not category_prefixes:
+        return ""
+
+    codes = ", ".join(f'"{prefix}"' for prefix in sorted(category_prefixes))
+    return f"""```toml
+[tool.ruff.lint]
+{section} = [{codes}]
+```"""

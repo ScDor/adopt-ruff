@@ -20,7 +20,7 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
-    "mypy>=1.14.0",
+    "ty",
     "prek",
     "ruff>=0.8.4",
 ]

@@ -48,10 +48,7 @@ def output_table(
     collapsible: bool,
     collapsible_summary: str = "Details",
 ) -> None:
-    """
-    Creates a markdown table, and saves to a CSV
-    """
-
+    """Creates a markdown table, and saves to a CSV."""
     md_table = tabulate(
         [make_name_clickable(item) for item in items],
         tablefmt="github",
@@ -72,9 +69,7 @@ def make_name_clickable(item: dict) -> dict:
 
 
 def search_config_file(path: Path) -> Path | None:
-    """
-    Searches for common configuration files under the given directory.
-    """
+    """Searches for common configuration files under the given directory."""
     for name in ("pyproject.toml", "ruff.toml", ".ruff.toml"):
         if (file_path := path / name).exists():
             logger.info(f"found config file at {file_path.resolve()!s}")

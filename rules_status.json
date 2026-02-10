@@ -1,0 +1,1060 @@
+[
+  {
+    "cell": null,
+    "code": "D104",
+    "end_location": {
+      "column": 1,
+      "row": 1
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/__init__.py",
+    "fix": null,
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Missing docstring in public package",
+    "noqa_row": 1,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-package"
+  },
+  {
+    "cell": null,
+    "code": "D100",
+    "end_location": {
+      "column": 1,
+      "row": 1
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/main.py",
+    "fix": null,
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Missing docstring in public module",
+    "noqa_row": 1,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-module"
+  },
+  {
+    "cell": null,
+    "code": "D103",
+    "end_location": {
+      "column": 13,
+      "row": 21
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/main.py",
+    "fix": null,
+    "location": {
+      "column": 5,
+      "row": 21
+    },
+    "message": "Missing docstring in public function",
+    "noqa_row": 21,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-function"
+  },
+  {
+    "cell": null,
+    "code": "D103",
+    "end_location": {
+      "column": 8,
+      "row": 72
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/main.py",
+    "fix": null,
+    "location": {
+      "column": 5,
+      "row": 72
+    },
+    "message": "Missing docstring in public function",
+    "noqa_row": 72,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-function"
+  },
+  {
+    "cell": null,
+    "code": "D103",
+    "end_location": {
+      "column": 17,
+      "row": 196
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/main.py",
+    "fix": null,
+    "location": {
+      "column": 5,
+      "row": 196
+    },
+    "message": "Missing docstring in public function",
+    "noqa_row": 196,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-function"
+  },
+  {
+    "cell": null,
+    "code": "D103",
+    "end_location": {
+      "column": 20,
+      "row": 200
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/main.py",
+    "fix": null,
+    "location": {
+      "column": 5,
+      "row": 200
+    },
+    "message": "Missing docstring in public function",
+    "noqa_row": 200,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-function"
+  },
+  {
+    "cell": null,
+    "code": "D103",
+    "end_location": {
+      "column": 22,
+      "row": 217
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/main.py",
+    "fix": null,
+    "location": {
+      "column": 5,
+      "row": 217
+    },
+    "message": "Missing docstring in public function",
+    "noqa_row": 217,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-function"
+  },
+  {
+    "cell": null,
+    "code": "D103",
+    "end_location": {
+      "column": 19,
+      "row": 241
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/main.py",
+    "fix": null,
+    "location": {
+      "column": 5,
+      "row": 241
+    },
+    "message": "Missing docstring in public function",
+    "noqa_row": 241,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-function"
+  },
+  {
+    "cell": null,
+    "code": "D103",
+    "end_location": {
+      "column": 28,
+      "row": 255
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/main.py",
+    "fix": null,
+    "location": {
+      "column": 5,
+      "row": 255
+    },
+    "message": "Missing docstring in public function",
+    "noqa_row": 255,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-function"
+  },
+  {
+    "cell": null,
+    "code": "ANN202",
+    "end_location": {
+      "column": 10,
+      "row": 268
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/main.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": " -> None",
+          "end_location": {
+            "column": 2,
+            "row": 315
+          },
+          "location": {
+            "column": 2,
+            "row": 315
+          }
+        }
+      ],
+      "message": "Add return type annotation: `None`"
+    },
+    "location": {
+      "column": 5,
+      "row": 268
+    },
+    "message": "Missing return type annotation for private function `_main`",
+    "noqa_row": 268,
+    "url": "https://docs.astral.sh/ruff/rules/missing-return-type-private-function"
+  },
+  {
+    "cell": null,
+    "code": "ANN201",
+    "end_location": {
+      "column": 9,
+      "row": 342
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/main.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": " -> None",
+          "end_location": {
+            "column": 11,
+            "row": 342
+          },
+          "location": {
+            "column": 11,
+            "row": 342
+          }
+        }
+      ],
+      "message": "Add return type annotation: `None`"
+    },
+    "location": {
+      "column": 5,
+      "row": 342
+    },
+    "message": "Missing return type annotation for public function `main`",
+    "noqa_row": 342,
+    "url": "https://docs.astral.sh/ruff/rules/missing-return-type-undocumented-public-function"
+  },
+  {
+    "cell": null,
+    "code": "D103",
+    "end_location": {
+      "column": 9,
+      "row": 342
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/main.py",
+    "fix": null,
+    "location": {
+      "column": 5,
+      "row": 342
+    },
+    "message": "Missing docstring in public function",
+    "noqa_row": 342,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-function"
+  },
+  {
+    "cell": null,
+    "code": "D104",
+    "end_location": {
+      "column": 1,
+      "row": 1
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/__init__.py",
+    "fix": null,
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Missing docstring in public package",
+    "noqa_row": 1,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-package"
+  },
+  {
+    "cell": null,
+    "code": "D100",
+    "end_location": {
+      "column": 1,
+      "row": 1
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/ruff_config.py",
+    "fix": null,
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Missing docstring in public module",
+    "noqa_row": 1,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-module"
+  },
+  {
+    "cell": null,
+    "code": "D101",
+    "end_location": {
+      "column": 20,
+      "row": 13
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/ruff_config.py",
+    "fix": null,
+    "location": {
+      "column": 7,
+      "row": 13
+    },
+    "message": "Missing docstring in public class",
+    "noqa_row": 13,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-class"
+  },
+  {
+    "cell": null,
+    "code": "D102",
+    "end_location": {
+      "column": 18,
+      "row": 18
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/ruff_config.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 18
+    },
+    "message": "Missing docstring in public method",
+    "noqa_row": 18,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-method"
+  },
+  {
+    "cell": null,
+    "code": "D102",
+    "end_location": {
+      "column": 23,
+      "row": 53
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/ruff_config.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 53
+    },
+    "message": "Missing docstring in public method",
+    "noqa_row": 53,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-method"
+  },
+  {
+    "cell": null,
+    "code": "D101",
+    "end_location": {
+      "column": 17,
+      "row": 60
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/ruff_config.py",
+    "fix": null,
+    "location": {
+      "column": 7,
+      "row": 60
+    },
+    "message": "Missing docstring in public class",
+    "noqa_row": 60,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-class"
+  },
+  {
+    "cell": null,
+    "code": "D102",
+    "end_location": {
+      "column": 18,
+      "row": 65
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/ruff_config.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 65
+    },
+    "message": "Missing docstring in public method",
+    "noqa_row": 65,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-method"
+  },
+  {
+    "cell": null,
+    "code": "D102",
+    "end_location": {
+      "column": 18,
+      "row": 81
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/ruff_config.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 81
+    },
+    "message": "Missing docstring in public method",
+    "noqa_row": 81,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-method"
+  },
+  {
+    "cell": null,
+    "code": "D200",
+    "end_location": {
+      "column": 8,
+      "row": 88
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/ruff_config.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "\"\"\"Convert code values (E401), categories (E) and ALL, into Rule objects\"\"\"",
+          "end_location": {
+            "column": 8,
+            "row": 88
+          },
+          "location": {
+            "column": 5,
+            "row": 86
+          }
+        }
+      ],
+      "message": "Reformat to one line"
+    },
+    "location": {
+      "column": 5,
+      "row": 86
+    },
+    "message": "One-line docstring should fit on one line",
+    "noqa_row": 88,
+    "url": "https://docs.astral.sh/ruff/rules/fits-on-one-line"
+  },
+  {
+    "cell": null,
+    "code": "D212",
+    "end_location": {
+      "column": 8,
+      "row": 88
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/ruff_config.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 5,
+            "row": 87
+          },
+          "location": {
+            "column": 8,
+            "row": 86
+          }
+        }
+      ],
+      "message": "Remove whitespace after opening quotes"
+    },
+    "location": {
+      "column": 5,
+      "row": 86
+    },
+    "message": "Multi-line docstring summary should start at the first line",
+    "noqa_row": 88,
+    "url": "https://docs.astral.sh/ruff/rules/multi-line-summary-first-line"
+  },
+  {
+    "cell": null,
+    "code": "D400",
+    "end_location": {
+      "column": 8,
+      "row": 88
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/ruff_config.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": ".",
+          "end_location": {
+            "column": 74,
+            "row": 87
+          },
+          "location": {
+            "column": 74,
+            "row": 87
+          }
+        }
+      ],
+      "message": "Add period"
+    },
+    "location": {
+      "column": 5,
+      "row": 86
+    },
+    "message": "First line should end with a period",
+    "noqa_row": 88,
+    "url": "https://docs.astral.sh/ruff/rules/ends-in-period"
+  },
+  {
+    "cell": null,
+    "code": "D415",
+    "end_location": {
+      "column": 8,
+      "row": 88
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/ruff_config.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": ".",
+          "end_location": {
+            "column": 74,
+            "row": 87
+          },
+          "location": {
+            "column": 74,
+            "row": 87
+          }
+        }
+      ],
+      "message": "Add closing punctuation"
+    },
+    "location": {
+      "column": 5,
+      "row": 86
+    },
+    "message": "First line should end with a period, question mark, or exclamation point",
+    "noqa_row": 88,
+    "url": "https://docs.astral.sh/ruff/rules/ends-in-punctuation"
+  },
+  {
+    "cell": null,
+    "code": "D100",
+    "end_location": {
+      "column": 1,
+      "row": 1
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/ruff_output.py",
+    "fix": null,
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Missing docstring in public module",
+    "noqa_row": 1,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-module"
+  },
+  {
+    "cell": null,
+    "code": "D101",
+    "end_location": {
+      "column": 15,
+      "row": 6
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/ruff_output.py",
+    "fix": null,
+    "location": {
+      "column": 7,
+      "row": 6
+    },
+    "message": "Missing docstring in public class",
+    "noqa_row": 6,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-class"
+  },
+  {
+    "cell": null,
+    "code": "D101",
+    "end_location": {
+      "column": 11,
+      "row": 11
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/ruff_output.py",
+    "fix": null,
+    "location": {
+      "column": 7,
+      "row": 11
+    },
+    "message": "Missing docstring in public class",
+    "noqa_row": 11,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-class"
+  },
+  {
+    "cell": null,
+    "code": "D101",
+    "end_location": {
+      "column": 10,
+      "row": 17
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/ruff_output.py",
+    "fix": null,
+    "location": {
+      "column": 7,
+      "row": 17
+    },
+    "message": "Missing docstring in public class",
+    "noqa_row": 17,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-class"
+  },
+  {
+    "cell": null,
+    "code": "D101",
+    "end_location": {
+      "column": 16,
+      "row": 23
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/ruff_output.py",
+    "fix": null,
+    "location": {
+      "column": 7,
+      "row": 23
+    },
+    "message": "Missing docstring in public class",
+    "noqa_row": 23,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-class"
+  },
+  {
+    "cell": null,
+    "code": "D100",
+    "end_location": {
+      "column": 1,
+      "row": 1
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/rule.py",
+    "fix": null,
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Missing docstring in public module",
+    "noqa_row": 1,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-module"
+  },
+  {
+    "cell": null,
+    "code": "D101",
+    "end_location": {
+      "column": 22,
+      "row": 9
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/rule.py",
+    "fix": null,
+    "location": {
+      "column": 7,
+      "row": 9
+    },
+    "message": "Missing docstring in public class",
+    "noqa_row": 9,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-class"
+  },
+  {
+    "cell": null,
+    "code": "D102",
+    "end_location": {
+      "column": 17,
+      "row": 15
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/rule.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 15
+    },
+    "message": "Missing docstring in public method",
+    "noqa_row": 15,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-method"
+  },
+  {
+    "cell": null,
+    "code": "D101",
+    "end_location": {
+      "column": 11,
+      "row": 27
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/rule.py",
+    "fix": null,
+    "location": {
+      "column": 7,
+      "row": 27
+    },
+    "message": "Missing docstring in public class",
+    "noqa_row": 27,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-class"
+  },
+  {
+    "cell": null,
+    "code": "D106",
+    "end_location": {
+      "column": 17,
+      "row": 28
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/rule.py",
+    "fix": null,
+    "location": {
+      "column": 11,
+      "row": 28
+    },
+    "message": "Missing docstring in public nested class",
+    "noqa_row": 28,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-nested-class"
+  },
+  {
+    "cell": null,
+    "code": "D102",
+    "end_location": {
+      "column": 16,
+      "row": 41
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/rule.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 41
+    },
+    "message": "Missing docstring in public method",
+    "noqa_row": 41,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-method"
+  },
+  {
+    "cell": null,
+    "code": "ANN201",
+    "end_location": {
+      "column": 19,
+      "row": 51
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/rule.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 51
+    },
+    "message": "Missing return type annotation for public function `is_fixable`",
+    "noqa_row": 51,
+    "url": "https://docs.astral.sh/ruff/rules/missing-return-type-undocumented-public-function"
+  },
+  {
+    "cell": null,
+    "code": "D102",
+    "end_location": {
+      "column": 19,
+      "row": 51
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/models/rule.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 51
+    },
+    "message": "Missing docstring in public method",
+    "noqa_row": 51,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-method"
+  },
+  {
+    "cell": null,
+    "code": "D100",
+    "end_location": {
+      "column": 1,
+      "row": 1
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/utils.py",
+    "fix": null,
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Missing docstring in public module",
+    "noqa_row": 1,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-module"
+  },
+  {
+    "cell": null,
+    "code": "D103",
+    "end_location": {
+      "column": 21,
+      "row": 14
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/utils.py",
+    "fix": null,
+    "location": {
+      "column": 5,
+      "row": 14
+    },
+    "message": "Missing docstring in public function",
+    "noqa_row": 14,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-function"
+  },
+  {
+    "cell": null,
+    "code": "D103",
+    "end_location": {
+      "column": 17,
+      "row": 24
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/utils.py",
+    "fix": null,
+    "location": {
+      "column": 5,
+      "row": 24
+    },
+    "message": "Missing docstring in public function",
+    "noqa_row": 24,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-function"
+  },
+  {
+    "cell": null,
+    "code": "D200",
+    "end_location": {
+      "column": 8,
+      "row": 53
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/utils.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "\"\"\"Creates a markdown table, and saves to a CSV\"\"\"",
+          "end_location": {
+            "column": 8,
+            "row": 53
+          },
+          "location": {
+            "column": 5,
+            "row": 51
+          }
+        }
+      ],
+      "message": "Reformat to one line"
+    },
+    "location": {
+      "column": 5,
+      "row": 51
+    },
+    "message": "One-line docstring should fit on one line",
+    "noqa_row": 53,
+    "url": "https://docs.astral.sh/ruff/rules/fits-on-one-line"
+  },
+  {
+    "cell": null,
+    "code": "D202",
+    "end_location": {
+      "column": 8,
+      "row": 53
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/utils.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 54
+          },
+          "location": {
+            "column": 8,
+            "row": 53
+          }
+        }
+      ],
+      "message": "Remove blank line(s) after function docstring"
+    },
+    "location": {
+      "column": 5,
+      "row": 51
+    },
+    "message": "No blank lines allowed after function docstring (found 1)",
+    "noqa_row": 53,
+    "url": "https://docs.astral.sh/ruff/rules/no-blank-line-after-function"
+  },
+  {
+    "cell": null,
+    "code": "D212",
+    "end_location": {
+      "column": 8,
+      "row": 53
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/utils.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 5,
+            "row": 52
+          },
+          "location": {
+            "column": 8,
+            "row": 51
+          }
+        }
+      ],
+      "message": "Remove whitespace after opening quotes"
+    },
+    "location": {
+      "column": 5,
+      "row": 51
+    },
+    "message": "Multi-line docstring summary should start at the first line",
+    "noqa_row": 53,
+    "url": "https://docs.astral.sh/ruff/rules/multi-line-summary-first-line"
+  },
+  {
+    "cell": null,
+    "code": "D400",
+    "end_location": {
+      "column": 8,
+      "row": 53
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/utils.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": ".",
+          "end_location": {
+            "column": 49,
+            "row": 52
+          },
+          "location": {
+            "column": 49,
+            "row": 52
+          }
+        }
+      ],
+      "message": "Add period"
+    },
+    "location": {
+      "column": 5,
+      "row": 51
+    },
+    "message": "First line should end with a period",
+    "noqa_row": 53,
+    "url": "https://docs.astral.sh/ruff/rules/ends-in-period"
+  },
+  {
+    "cell": null,
+    "code": "D401",
+    "end_location": {
+      "column": 8,
+      "row": 53
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/utils.py",
+    "fix": null,
+    "location": {
+      "column": 5,
+      "row": 51
+    },
+    "message": "First line of docstring should be in imperative mood: \"Creates a markdown table, and saves to a CSV\"",
+    "noqa_row": 53,
+    "url": "https://docs.astral.sh/ruff/rules/non-imperative-mood"
+  },
+  {
+    "cell": null,
+    "code": "D415",
+    "end_location": {
+      "column": 8,
+      "row": 53
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/utils.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": ".",
+          "end_location": {
+            "column": 49,
+            "row": 52
+          },
+          "location": {
+            "column": 49,
+            "row": 52
+          }
+        }
+      ],
+      "message": "Add closing punctuation"
+    },
+    "location": {
+      "column": 5,
+      "row": 51
+    },
+    "message": "First line should end with a period, question mark, or exclamation point",
+    "noqa_row": 53,
+    "url": "https://docs.astral.sh/ruff/rules/ends-in-punctuation"
+  },
+  {
+    "cell": null,
+    "code": "D103",
+    "end_location": {
+      "column": 24,
+      "row": 68
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/utils.py",
+    "fix": null,
+    "location": {
+      "column": 5,
+      "row": 68
+    },
+    "message": "Missing docstring in public function",
+    "noqa_row": 68,
+    "url": "https://docs.astral.sh/ruff/rules/undocumented-public-function"
+  },
+  {
+    "cell": null,
+    "code": "D200",
+    "end_location": {
+      "column": 8,
+      "row": 77
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/utils.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "\"\"\"Searches for common configuration files under the given directory.\"\"\"",
+          "end_location": {
+            "column": 8,
+            "row": 77
+          },
+          "location": {
+            "column": 5,
+            "row": 75
+          }
+        }
+      ],
+      "message": "Reformat to one line"
+    },
+    "location": {
+      "column": 5,
+      "row": 75
+    },
+    "message": "One-line docstring should fit on one line",
+    "noqa_row": 77,
+    "url": "https://docs.astral.sh/ruff/rules/fits-on-one-line"
+  },
+  {
+    "cell": null,
+    "code": "D212",
+    "end_location": {
+      "column": 8,
+      "row": 77
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/utils.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 5,
+            "row": 76
+          },
+          "location": {
+            "column": 8,
+            "row": 75
+          }
+        }
+      ],
+      "message": "Remove whitespace after opening quotes"
+    },
+    "location": {
+      "column": 5,
+      "row": 75
+    },
+    "message": "Multi-line docstring summary should start at the first line",
+    "noqa_row": 77,
+    "url": "https://docs.astral.sh/ruff/rules/multi-line-summary-first-line"
+  },
+  {
+    "cell": null,
+    "code": "D401",
+    "end_location": {
+      "column": 8,
+      "row": 77
+    },
+    "filename": "/home/dor/adopt-ruff/.worktrees/adopt-ruff/adopt_ruff/utils.py",
+    "fix": null,
+    "location": {
+      "column": 5,
+      "row": 75
+    },
+    "message": "First line of docstring should be in imperative mood: \"Searches for common configuration files under the given directory.\"",
+    "noqa_row": 77,
+    "url": "https://docs.astral.sh/ruff/rules/non-imperative-mood"
+  }
+]

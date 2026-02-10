@@ -38,9 +38,9 @@ target-version = "py311"
 select = ["ALL"]
 ignore = [
     "ISC001",
-    "ANN",
+    "ANN201",
+    "ANN202",
     "D",
-    "DTZ",
     "COM812",
     "EM102",
     "TRY003",

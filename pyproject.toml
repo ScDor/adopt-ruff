@@ -21,7 +21,7 @@ build-backend = "hatchling.build"
 [dependency-groups]
 dev = [
     "mypy>=1.14.0",
-    "pre-commit>=4.0.1",
+    "prek",
     "ruff>=0.8.4",
 ]
 typing = [
@@ -49,7 +49,6 @@ ignore = [
     "G004",
     "INP001",
     "S501",
-    "PD901",
     "E501",
     "TD002",
     "TD003",

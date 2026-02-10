@@ -4,7 +4,7 @@ import subprocess
 import sys
 from collections.abc import Iterable
 from pathlib import Path
-from typing import Annotated, Optional
+from typing import Annotated
 
 import more_itertools
 import typer
@@ -53,7 +53,8 @@ def run_ruff(path: Path) -> tuple[set[Rule], tuple[Violation, ...], Version]:
         for value in json.loads(
             subprocess.run(
                 [
-                    *["ruff" if ruff_version < Version("0.3.0") else "ruff", "check"],
+                    "ruff",
+                    "check",
                     str(path),
                     "--output-format=json",
                     "--select=ALL",
@@ -277,7 +278,7 @@ def _main(
         ),
     ] = Path(),
     ruff_conf_path: Annotated[
-        Optional[Path],  # noqa: UP007
+        Path | None,
         typer.Option(
             help="Path to the pyproject.toml/ruff.toml file. If not provided, adopt-ruff will attempt to locate it.",
             envvar="ADOPT_RUFF_CONFIG_FILE_PATH",
@@ -306,7 +307,7 @@ def _main(
         ),
     ] = True,
     repo_name: Annotated[
-        Optional[str],  # noqa: UP007
+        str | None,
         typer.Option(
             help="The repository name for the report",
             envvar="ADOPT_RUFF_REPO_NAME",

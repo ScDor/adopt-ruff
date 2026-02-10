@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Literal
+from typing import Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class FixAvailability(Enum):
@@ -25,9 +25,7 @@ class FixAvailability(Enum):
 
 
 class Rule(BaseModel):
-    class Config:
-        frozen = True
-        use_enum_values: Literal[True]
+    model_config = ConfigDict(frozen=True, use_enum_values=True)
 
     name: str
     code: str

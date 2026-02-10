@@ -3,7 +3,7 @@ name: adopt-ruff
 description: Use when you want to expand Ruff rule coverage in a Python repository using adopt-ruff suggestions.
 ---
 
-# Adopt Ruff
+# Adopt-Ruff
 
 ## Overview
 "Ruffness" is the measure of how comprehensively a Python project utilizes [Ruff](https://ruff.rs) for linting and formatting. Increasing ruffness means systematically adopting more rules to catch bugs, enforce style, and improve maintainability.

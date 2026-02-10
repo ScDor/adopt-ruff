@@ -1,9 +1,9 @@
 name: prek
 
 on:
-  pull_request:
   push:
     branches: [master]
+  pull_request:
 
 jobs:
   prek:
@@ -15,14 +15,4 @@ jobs:
       run: uv sync
     - uses: j178/prek-action@v1
       with:
-        # Since we want to use the local 'ty' installed via uv,
-        # and prek-action runs 'prek run', we might need to ensure
-        # prek is run within 'uv run' if it's using system language.
-        # However, j178/prek-action installs prek itself.
-        # If we use 'uv run prek run', it would work.
-        # But prek-action doesn't support 'uv run' prefix.
-
-        # Alternatively, we can just install 'ty' globally or in the path.
-        # Or better: use 'uv run' in the hook entry as I did.
-        # But 'uv' must be in the path. 'setup-uv' handles that.
         extra-args: --all-files

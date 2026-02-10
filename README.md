@@ -90,6 +90,28 @@ Run `adopt-ruff --help` for more information.\
 - `--sometimes-fixable`: whether to consider sometimes-fixable rules as fixable.
 - `--preview`/`--no-preview`: whether to include preview rules.
 - `--repo-name`: Will be shown in the output. When not provided, won't be shown.
+- `--interactive` / `-i`: Run in interactive mode to select and apply rules to your configuration.
+
+#### Interactive Mode
+The interactive mode allows you to select rules from the report and automatically update your ruff configuration file.
+
+Run `adopt-ruff --interactive` to:
+1. Analyze your codebase and categorize applicable rules
+2. Browse and select rules from three categories:
+   - **Respected Rules**: Rules with 0 violations (safe to add immediately 🚀)
+   - **Autofixable Rules**: Rules with violations that can be auto-fixed 🪄
+   - **Applicable Rules**: Rules with violations (will require manual fixes 🔧)
+3. Preview the changes before applying
+4. Automatically update your configuration file with selected rules
+
+Example:
+```bash
+adopt-ruff --interactive
+# or with options
+adopt-ruff -i --preview --sometimes-fixable
+```
+
+**Note:** Interactive mode requires a TTY (interactive terminal) and cannot be used in CI/CD pipelines.
 
 
 # Report Example

@@ -12,6 +12,7 @@ from mdutils.mdutils import MdUtils
 from packaging.version import Version
 from tabulate import tabulate
 
+from adopt_ruff.interactive import run_interactive_mode
 from adopt_ruff.models.ruff_config import RuffConfig
 from adopt_ruff.models.ruff_output import Violation
 from adopt_ruff.models.rule import FixAvailability, Rule
@@ -77,7 +78,7 @@ def run(
     include_sometimes_fixable: bool,
     include_preview: bool,
     repo_name: str | None = None,
-) -> str:
+) -> tuple[str, list[Rule], list[Rule], list[Rule]]:
     md = MdUtils("output")
 
     repo_name_header = f"for {repo_name} " if repo_name else ""
@@ -190,7 +191,22 @@ def run(
             headers=["Configuration", "Value"],
         )
     )
-    return md.get_md_text()
+
+    # Return report and categorized rules for interactive mode
+    applicable_rules = (
+        sorted(
+            violated_rule_to_violations.keys(),
+            key=lambda rule: (
+                len(violated_rule_to_violations[rule]),
+                rule.linter,
+                rule.code,
+            ),
+        )
+        if violated_rule_to_violations
+        else []
+    )
+
+    return md.get_md_text(), respected, autofixable, applicable_rules
 
 
 def sort_by_code(rules: Iterable[Rule]) -> list[Rule]:
@@ -312,20 +328,31 @@ def _main(
             envvar="ADOPT_RUFF_REPO_NAME",
         ),
     ] = None,
+    interactive: Annotated[
+        bool,
+        typer.Option(
+            "--interactive",
+            "-i",
+            help="Run in interactive mode to select and apply rules",
+            is_flag=True,
+        ),
+    ] = False,
 ):
     logger.debug(f"{code_path.resolve()=!s}")
     logger.debug(f"{ruff_conf_path=!s}")
     logger.debug(f"{include_preview=}")
     logger.debug(f"{include_sometimes_fixable=}")
     logger.debug(f"{repo_name=}")
+    logger.debug(f"{interactive=}")
 
     rules, violations, ruff_version = run_ruff(code_path)
+    config_path = ruff_conf_path or search_config_file(code_path)
     config: RuffConfig = RuffConfig.from_file(
-        path=ruff_conf_path or search_config_file(code_path),
+        path=config_path,
         rules=rules,
     )
 
-    result = run(
+    report, respected, autofixable, applicable = run(
         rules=rules,
         violations=violations,
         config=config,
@@ -335,8 +362,25 @@ def _main(
         repo_name=repo_name,
     )
 
-    Path("result.md").write_text(result)
+    # Write report
+    Path("result.md").write_text(report)
     logger.debug("wrote output to result.md")
+
+    # Run interactive mode if requested
+    if interactive:
+        if config_path is None:
+            logger.error(
+                "Cannot run interactive mode: no configuration file found. "
+                "Please create a ruff.toml, .ruff.toml, or pyproject.toml file."
+            )
+            sys.exit(1)
+
+        run_interactive_mode(
+            respected=respected,
+            autofixable=autofixable,
+            applicable=applicable,
+            config_path=config_path,
+        )
 
 
 def main():

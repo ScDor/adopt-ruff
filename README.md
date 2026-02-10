@@ -9,6 +9,8 @@ A tool for finding Ruff rules that are not yet configured, and can be added to y
 - Rules that can be automatically fixed by Ruff 🪄
 - Rules violated in the repository, sorted by ascending violation count 🔎
 
+**✨ New:** When all rules in a category (e.g., RUF, ASYNC) belong to the same situation, adopt-ruff highlights these categories with ready-to-use configuration snippets!
+
 The output is a markdown report, easy to check as a Github action summary and CSV files with relevant Rule information per category.
 
 _See example at the bottom of this page_
@@ -98,15 +100,28 @@ Run `adopt-ruff --help` for more information.\
 ## Respected Ruff rules
 
 374 Ruff rules are already respected in the repo - they can be added right away 🚀
+
+### ✅ Categories with ALL rules respected:
+- **flake8-async (ASYNC)**: All 12 rules 🎉
+- **flake8-builtins (A)**: All 3 rules 🎉
+
+💡 **Quick add to your config:**
+```toml
+[tool.ruff.lint]
+select = ["A", "ASYNC"]
+```
+
 <details>
 <summary>Details</summary>
 
 | Code     | Name                                         | Fixable   | Preview   | Linter                     |
 |----------|----------------------------------------------|-----------|-----------|----------------------------|
+| A001     | builtin-variable-shadowing                   | No        | False     | flake8-builtins            |
+| A002     | builtin-argument-shadowing                   | No        | False     | flake8-builtins            |
 | A003     | builtin-attribute-shadowing                  | No        | False     | flake8-builtins            |
 | AIR001   | airflow-variable-name-task-id-mismatch       | No        | False     | Airflow                    |
 | ASYNC100 | blocking-http-call-in-async-function         | No        | False     | flake8-async               |
-| ASYNC101 | open-sleep-or-subprocess-in-async-function   | No        | False     | Perflint                   |
+| ASYNC101 | open-sleep-or-subprocess-in-async-function   | No        | False     | flake8-async               |
 | PERF403  | manual-dict-comprehension                    | No        | True      | Perflint                   |
 
 (table truncated for example purposes)
@@ -116,6 +131,17 @@ Run `adopt-ruff --help` for more information.\
 ## Autofixable Ruff rules
 
 65 Ruff rules are violated in the repo, but can be auto-fixed 🪄
+
+### 🎯 Categories with ALL rules autofixable:
+- **Ruff-specific rules (RUF)**: All 5 rules ✨
+- **flake8-comprehensions (C4)**: All 8 rules ✨
+
+💡 **Quick add to your config:**
+```toml
+[tool.ruff.lint]
+select = ["C4", "RUF"]
+```
+
 <details>
 <summary>Details</summary>
 
@@ -124,6 +150,10 @@ Run `adopt-ruff --help` for more information.\
 | B010    | set-attr-with-constant                            | Always    | False     | flake8-bugbear        |
 | B011    | assert-false                                      | Always    | False     | flake8-bugbear        |
 | C401    | unnecessary-generator-set                         | Always    | False     | flake8-comprehensions |
+| C402    | unnecessary-generator-dict                        | Always    | False     | flake8-comprehensions |
+| RUF001  | ambiguous-unicode-character-string                | Always    | False     | Ruff-specific rules   |
+| RUF002  | ambiguous-unicode-character-docstring             | Always    | False     | Ruff-specific rules   |
+| RUF003  | ambiguous-unicode-character-comment               | Always    | False     | Ruff-specific rules   |
 
 (table truncated for example purposes)
 
@@ -132,6 +162,13 @@ Run `adopt-ruff --help` for more information.\
 ## Applicable Rules
 
 194 other Ruff rules are not yet configured in the repository
+
+### 📋 Categories with ALL rules violated:
+- **pydocstyle (D)**: All 58 rules 🔍
+- **flake8-use-pathlib (PTH)**: All 27 rules 🔍
+
+💡 **Tip:** These categories need attention across the entire codebase
+
 <details>
 <summary>Details</summary>
 

@@ -15,7 +15,14 @@ from tabulate import tabulate
 from adopt_ruff.models.ruff_config import RuffConfig
 from adopt_ruff.models.ruff_output import Violation
 from adopt_ruff.models.rule import FixAvailability, Rule
-from adopt_ruff.utils import ARTIFACTS_PATH, logger, output_table, search_config_file
+from adopt_ruff.utils import (
+    ARTIFACTS_PATH,
+    find_complete_categories,
+    generate_pyproject_suggestion,
+    logger,
+    output_table,
+    search_config_file,
+)
 
 
 def run_ruff(path: Path) -> tuple[set[Rule], tuple[Violation, ...], Version]:
@@ -99,6 +106,24 @@ def run(
             f"{len(respected)} Ruff rules are already respected in the repo - "
             "they can be added right away 🚀"
         )
+
+        # Check for complete categories
+        complete_cats = find_complete_categories(respected, rules)
+        if complete_cats:
+            md.new_header(3, "✅ Categories with ALL rules respected:")
+            for prefix in sorted(complete_cats.keys()):
+                linter_name, count = complete_cats[prefix]
+                md.new_line(f"- **{linter_name} ({prefix})**: All {count} rules 🎉")
+
+            # Add configuration suggestion
+            md.new_line(
+                "\n💡 **Quick add to your config:**"
+            )
+            md.new_line(
+                generate_pyproject_suggestion(list(complete_cats.keys()), "select")
+            )
+            md.new_line("")  # Add spacing
+
         output_table(
             items=([r.as_dict() for r in respected]),
             path=ARTIFACTS_PATH / "respected.csv",
@@ -120,6 +145,24 @@ def run(
         md.new_line(
             f"{len(autofixable)} Ruff rules are violated in the repo, but can{always_status} be auto-fixed 🪄"
         )
+
+        # Check for complete categories
+        complete_cats = find_complete_categories(autofixable, rules)
+        if complete_cats:
+            md.new_header(3, "🎯 Categories with ALL rules autofixable:")
+            for prefix in sorted(complete_cats.keys()):
+                linter_name, count = complete_cats[prefix]
+                md.new_line(f"- **{linter_name} ({prefix})**: All {count} rules ✨")
+
+            # Add configuration suggestion
+            md.new_line(
+                "\n💡 **Quick add to your config:**"
+            )
+            md.new_line(
+                generate_pyproject_suggestion(list(complete_cats.keys()), "select")
+            )
+            md.new_line("")  # Add spacing
+
         output_table(
             items=([r.as_dict() for r in autofixable]),
             path=ARTIFACTS_PATH / "autofixable.csv",
@@ -153,6 +196,20 @@ def run(
         md.new_line(
             f"{len(applicable_rules)} other Ruff rules are not yet configured in the repository"
         )
+
+        # Check for complete categories
+        complete_cats = find_complete_categories(applicable_rules, rules)
+        if complete_cats:
+            md.new_header(3, "📋 Categories with ALL rules violated:")
+            for prefix in sorted(complete_cats.keys()):
+                linter_name, count = complete_cats[prefix]
+                md.new_line(f"- **{linter_name} ({prefix})**: All {count} rules 🔍")
+
+            md.new_line(
+                "\n💡 **Tip:** These categories need attention across the entire codebase"
+            )
+            md.new_line("")  # Add spacing
+
         output_table(
             items=(
                 [

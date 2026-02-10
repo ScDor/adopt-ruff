@@ -5,3 +5,4 @@ __pycache__
 /result.md
 /artifacts
 .python-version
+.worktrees/

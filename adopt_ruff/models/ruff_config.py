@@ -83,9 +83,7 @@ class RuffConfig(BaseModel):
 
 
 def _parse_raw_rules(raw_codes: set[str], rules: set[Rule]) -> set[Rule]:
-    """
-    Convert code values (E401), categories (E) and ALL, into Rule objects
-    """
+    """Convert code values (E401), categories (E) and ALL, into Rule objects."""
     if "ALL" in raw_codes:
         return rules
 

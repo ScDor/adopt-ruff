@@ -32,7 +32,7 @@ Start with rules your codebase already obeys.
 Adopt rules that Ruff can fix for you.
 - **Identify:** Look at the "Autofixable Ruff rules" table.
 - **Batching:** Select 1-5 rules at a time.
-- **Execute:** 
+- **Execute:**
   1. Add rules to configuration.
   2. Run `ruff check . --fix`.
   3. Verify changes.

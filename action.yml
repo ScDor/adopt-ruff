@@ -43,6 +43,6 @@ runs:
         ADOPT_RUFF_CONFIG_FILE_PATH: ${{ inputs.config-file-path  }}
       shell: bash
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         path: artifacts
